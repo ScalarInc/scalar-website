@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const patternData = {
   Screens: ["Checkout", "Settings", "Login", "Subscription & Paywall", "Home", "Account Setup", "Welcome", "Wallet"],
@@ -36,6 +36,102 @@ export default function Home() {
   const [activePattern, setActivePattern] = useState<keyof typeof patternData>("Screens");
   const [menuOpen, setMenuOpen] = useState(false);
 
+  useEffect(() => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const revealItems = document.querySelectorAll(
+      ".section-heading, .stats > p, .feature-copy article, .creation-card, .testimonial, .closing-copy > *"
+    );
+
+    revealItems.forEach((item, index) => {
+      item.classList.add("reveal");
+      (item as HTMLElement).style.setProperty("--reveal-delay", `${(index % 3) * 90}ms`);
+    });
+
+    if (reduced) {
+      revealItems.forEach((item) => item.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      }),
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+    );
+    revealItems.forEach((item) => observer.observe(item));
+
+    let frame = 0;
+    const clamp = (value: number) => Math.min(1, Math.max(0, value));
+    const update = () => {
+      frame = 0;
+      const viewport = window.innerHeight;
+      const y = window.scrollY;
+      document.querySelector(".nav-pill")?.classList.toggle("is-scrolled", y > 420);
+
+      const product = document.querySelector(".product-stage") as HTMLElement | null;
+      if (product) {
+        const rect = product.getBoundingClientRect();
+        const progress = clamp(-rect.top / Math.max(1, rect.height - viewport));
+        product.style.setProperty("--product-progress", progress.toFixed(4));
+      }
+
+      const stats = document.querySelector(".stats") as HTMLElement | null;
+      if (stats) {
+        const rect = stats.getBoundingClientRect();
+        const progress = clamp(-rect.top / Math.max(1, rect.height - viewport));
+        stats.style.setProperty("--stats-progress", progress.toFixed(4));
+        const phase = progress * 2;
+        const dominant = Math.round(phase);
+        stats.querySelectorAll("strong").forEach((item, index) => {
+          const distance = Math.abs(phase - index);
+          const opacity = index === dominant
+            ? 1 - distance * 0.45
+            : clamp((0.60 - distance) * 2);
+          (item as HTMLElement).style.opacity = opacity.toFixed(3);
+          (item as HTMLElement).style.transform =
+            `translate3d(0, ${(index - phase) * 185}px, 0) scale(${0.94 + opacity * 0.06})`;
+        });
+      }
+
+      const patterns = document.querySelector(".patterns") as HTMLElement | null;
+      if (patterns) {
+        const rect = patterns.getBoundingClientRect();
+        const progress = clamp(-rect.top / Math.max(1, rect.height - viewport));
+        patterns.style.setProperty("--pattern-progress", progress.toFixed(4));
+      }
+
+      const flows = document.querySelector(".flows") as HTMLElement | null;
+      if (flows) {
+        const rect = flows.getBoundingClientRect();
+        const progress = clamp((viewport - rect.top) / (viewport + rect.height));
+        flows.style.setProperty("--flow-progress", progress.toFixed(4));
+      }
+
+      const closing = document.querySelector(".closing") as HTMLElement | null;
+      if (closing) {
+        const rect = closing.getBoundingClientRect();
+        const progress = clamp((viewport - rect.top) / (viewport + rect.height));
+        closing.style.setProperty("--closing-progress", progress.toFixed(4));
+      }
+    };
+
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
   return (
     <main>
       <header className="nav-wrap">
@@ -50,6 +146,7 @@ export default function Home() {
             <a href="#pricing" onClick={() => setMenuOpen(false)}>Pricing</a>
             <a href="#footer" onClick={() => setMenuOpen(false)}>Log in</a>
           </div>
+          <a className="nav-cta" href="#library">Join for free</a>
           <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" aria-expanded={menuOpen}>
             <span />
             <span />
@@ -98,8 +195,20 @@ export default function Home() {
       </section>
 
       <section className="stats" id="library">
-        <p>A growing library of</p>
-        <div><strong>1,428 apps</strong><strong>621,500+ screens</strong><strong>323,900 flows</strong></div>
+        <p><span>Scalar index</span>A growing library of real product decisions</p>
+        <div className="stat-icons" aria-hidden="true">
+          {["grid","orbit","wave","stack","spark","focus","flow","layers"].map((motif, index) => (
+            <span className={`motif-tile motif-${motif}`} key={motif} data-index={index}>
+              <i /><i /><i />
+            </span>
+          ))}
+        </div>
+        <div className="stat-stack">
+          <strong><span>1,428</span><em>apps</em></strong>
+          <strong><span>621,500+</span><em>screens</em></strong>
+          <strong><span>323,900</span><em>flows</em></strong>
+          <small>Curated by product and pattern · Updated weekly</small>
+        </div>
       </section>
 
       <section className="patterns">
@@ -123,6 +232,15 @@ export default function Home() {
             <ul>
               {patternData[activePattern].map((item, index) => <li key={item}><span>{String(index + 1).padStart(2, "0")}</span>{item}<Arrow /></li>)}
             </ul>
+          </div>
+          <div className="pattern-rail" aria-hidden="true">
+            {[...patternData[activePattern], ...patternData[activePattern]].map((item, index) => (
+              <div className={`pattern-card pattern-card-${index % 4}`} key={`${item}-${index}`}>
+                <small>{String(index + 1).padStart(2, "0")}</small>
+                <div className="pattern-phone"><i /><i /><i /></div>
+                <b>{item}</b>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -186,7 +304,15 @@ export default function Home() {
           <div className="button-row"><a className="button white" href="#top">Join for free</a><a className="button outline" href="#footer">See our plans <Arrow /></a></div>
         </div>
         <div className="logo-cloud" aria-hidden="true">
-          {["Coinbase","Wise","Headspace","Airbnb","Uber","Nike","Pinterest","ChatGPT","Shopify","Loom","Mailchimp","Twitch","Spotify","Notion","Dropbox"].map((logo) => <span key={logo}>{logo}</span>)}
+          {[
+            ["Coinbase","Wise","Headspace","Airbnb","Uber","Nike","Pinterest"],
+            ["ChatGPT","Shopify","Loom","Mailchimp","Twitch","Figma","Arc"],
+            ["Spotify","Apple TV","Scalar","Notion","Dropbox","Linear","Cosmos"],
+          ].map((row, rowIndex) => (
+            <div className="logo-marquee" data-row={rowIndex} key={rowIndex}>
+              <div>{[...row, ...row].map((logo, index) => <span key={`${logo}-${index}`}>{logo}</span>)}</div>
+            </div>
+          ))}
         </div>
       </section>
 
