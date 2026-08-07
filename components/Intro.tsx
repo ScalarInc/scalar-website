@@ -36,7 +36,7 @@ function Seal() {
           fillOpacity="0.75"
         >
           <textPath href="#sealArc" startOffset="0">
-            BUILT WITH WHAT&rsquo;S NEXT · EST 2026 · BUILT WITH WHAT&rsquo;S NEXT · EST 2026 ·
+            BUILT FOR WHAT&rsquo;S NEXT · EST 2026 · BUILT FOR WHAT&rsquo;S NEXT · EST 2026 ·
           </textPath>
         </text>
       </motion.svg>
