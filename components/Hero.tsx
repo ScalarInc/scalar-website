@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import Image from "next/image";
+import { motion, useScroll, useSpring, useTransform } from "motion/react";
 
 /**
  * Hero: a rotating point-cloud sphere ringed by dotted orbits and crosshair
@@ -20,16 +21,33 @@ export default function Hero() {
   const fade = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
   const lift = useTransform(scrollYProgress, [0, 1], [0, -110]);
 
+  /* Depth rig. Three planes move at different rates so the composition reads
+   * as space rather than a flat image: the sky drifts up, the type lifts
+   * faster, and the peak settles down and dollies in. */
+  const pX = useSpring(0, { stiffness: 45, damping: 22 });
+  const pY = useSpring(0, { stiffness: 45, damping: 22 });
+
+  const skyY = useTransform(scrollYProgress, [0, 1], [0, -70]);
+  const textX = useTransform(pX, (v) => v * -0.5);
+  const peakX = useTransform(pX, (v) => v * 1.2);
+  const peakY = useTransform(
+    [scrollYProgress, pY] as const,
+    ([s, p]: number[]) => s * 78 + p * 0.8
+  );
+  const peakScale = useTransform(scrollYProgress, [0, 1], [1, 1.14]);
+
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
-      pointer.current = {
-        x: e.clientX / window.innerWidth - 0.5,
-        y: e.clientY / window.innerHeight - 0.5,
-      };
+      const nx = e.clientX / window.innerWidth - 0.5;
+      const ny = e.clientY / window.innerHeight - 0.5;
+      pointer.current = { x: nx, y: ny };
+      // foreground counter-moves against the cursor, which reads as depth
+      pX.set(nx * -20);
+      pY.set(ny * -12);
     };
     window.addEventListener("pointermove", onMove);
     return () => window.removeEventListener("pointermove", onMove);
-  }, []);
+  }, [pX, pY]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -45,48 +63,22 @@ export default function Hero() {
     let cy = 0;
     let base = 0;
     let raf = 0;
-    let spin = 0;
-    let last = 0;
 
-    /* -- point cloud: latitude-banded, irregular body -------------------
-     * Points sit on latitude rings (not a fibonacci scatter) so the surface
-     * shows curved rows as it turns, and the radius is displaced by stacked
-     * sinusoids to give the lumpy, asteroid-like silhouette of the reference.
-     * ------------------------------------------------------------------ */
-    const bump = (x: number, y: number, z: number) =>
-      0.5 * Math.sin(2.1 * x + 1.3) * Math.sin(1.7 * y + 0.4) * Math.sin(2.3 * z + 2.1) +
-      0.3 * Math.sin(4.3 * x + 0.7) * Math.sin(3.1 * y + 2.2) * Math.sin(3.7 * z + 0.9) +
-      0.2 * Math.sin(7.1 * x) * Math.sin(6.3 * y) * Math.sin(5.9 * z);
-
-    const BANDS = 58;
-    const cloud: { x: number; y: number; z: number }[] = [];
-    for (let b = 0; b < BANDS; b++) {
-      const theta = ((b + 0.5) / BANDS) * Math.PI;
-      const ringR = Math.sin(theta);
-      const count = Math.max(3, Math.round(78 * ringR));
-      for (let k = 0; k < count; k++) {
-        // offset each band so the rows read as a weave, not a grid
-        const phi = (k / count) * Math.PI * 2 + b * 0.35;
-        const ux = ringR * Math.cos(phi);
-        const uy = Math.cos(theta);
-        const uz = ringR * Math.sin(phi);
-        const r = 1 + 0.17 * bump(ux, uy, uz);
-        cloud.push({ x: ux * r, y: uy * r, z: uz * r });
-      }
-    }
-
-    /* -- orbital rings -------------------------------------------------- */
+    /* -- orbital rings --------------------------------------------------
+     * Dot counts scale with radius so density stays even as the rings grow.
+     * The outermost deliberately runs past the top and bottom edges. */
     const RINGS = [
-      { r: 1.5, dots: 160, speed: 0.00019, alpha: 0.5, tilt: 0.1 },
-      { r: 1.95, dots: 205, speed: -0.00014, alpha: 0.4, tilt: -0.06 },
-      { r: 2.45, dots: 250, speed: 0.00011, alpha: 0.3, tilt: 0.05 },
-      { r: 3.0, dots: 300, speed: -0.00008, alpha: 0.2, tilt: -0.08 },
+      { r: 1.15, dots: 165, speed: 0.00019, alpha: 0.5, tilt: 0.1 },
+      { r: 1.65, dots: 235, speed: -0.00014, alpha: 0.4, tilt: -0.06 },
+      { r: 2.15, dots: 305, speed: 0.00011, alpha: 0.3, tilt: 0.05 },
+      { r: 2.65, dots: 375, speed: -0.00008, alpha: 0.22, tilt: -0.08 },
     ];
 
     const MARKERS = [
-      { ring: 3, base: 0.62, sweep: 0.3, speed: 0.00021 },
-      { ring: 2, base: 2.32, sweep: 0.26, speed: 0.00016 },
-      { ring: 1, base: 1.38, sweep: 0.34, speed: 0.00012 },
+      { ring: 3, base: Math.PI * 1.22, sweep: 0.22, speed: 0.00021 }, // Top-Left sky (~220°)
+      { ring: 3, base: Math.PI * 1.76, sweep: 0.22, speed: 0.00018 }, // Top-Right sky (~317°)
+      { ring: 2, base: Math.PI * 1.14, sweep: 0.18, speed: 0.00014 }, // Top-Left outer sky (~205°)
+      { ring: 2, base: Math.PI * 1.83, sweep: 0.18, speed: 0.00016 }, // Top-Right outer sky (~330°)
     ];
 
     const resize = () => {
@@ -98,14 +90,10 @@ export default function Hero() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       cx = w / 2;
       cy = h / 2;
-      base = Math.min(w, h) * 0.132;
+      base = Math.min(w, h) * 0.2;
     };
 
     const draw = (now: number) => {
-      const dt = last ? Math.min(now - last, 48) : 16;
-      last = now;
-      spin += dt * 0.00016;
-
       ctx.clearRect(0, 0, w, h);
 
       const ox = pointer.current.x * 22;
@@ -128,10 +116,11 @@ export default function Hero() {
       /* crosshair markers with angular readouts */
       if (w >= 900) {
         for (const m of MARKERS) {
-          const rr = base * RINGS[m.ring].r;
+          const ring = RINGS[m.ring];
+          const rr = base * ring.r;
           const a = m.base + Math.sin(now * m.speed) * m.sweep;
           const x = cx + Math.cos(a) * rr + ox;
-          const y = cy + Math.sin(a) * rr + oy;
+          const y = cy + Math.sin(a) * rr * (1 + ring.tilt * 0.14) + oy;
 
           ctx.strokeStyle = "rgba(255,255,255,.7)";
           ctx.lineWidth = 1.3;
@@ -151,43 +140,6 @@ export default function Hero() {
           ctx.fillText(`${deg.toFixed(1)}°`, x + 15, y - 2);
           ctx.fillText(`${rad.toFixed(3)} rad`, x + 15, y + 11);
         }
-      }
-
-      /* the sphere */
-      const sin = Math.sin(spin);
-      const cos = Math.cos(spin);
-      const tiltS = Math.sin(0.42);
-      const tiltC = Math.cos(0.42);
-
-      // key light from upper-left-front
-      const LX = -0.42;
-      const LY = -0.55;
-      const LZ = 0.72;
-
-      for (const p of cloud) {
-        const x1 = p.x * cos + p.z * sin;
-        const z1 = -p.x * sin + p.z * cos;
-        const y2 = p.y * tiltC - z1 * tiltS;
-        const z2 = p.y * tiltS + z1 * tiltC;
-
-        // opaque body: drop the far hemisphere, keeping a little of the rim
-        if (z2 < -0.05) continue;
-
-        const persp = 1 / (1.9 - z2 * 0.42);
-        const sx = cx + x1 * base * persp * 2.35 + ox;
-        const sy = cy + y2 * base * persp * 2.35 + oy;
-
-        // lambert against the rotated normal (which is the point itself)
-        const len = Math.hypot(x1, y2, z2) || 1;
-        const lambert = (x1 * LX + y2 * LY + z2 * LZ) / len;
-        const front = (z2 + 1) / 2;
-
-        const lit = Math.max(0, lambert) * 0.85 + front * 0.3;
-        const alpha = Math.min(1, 0.05 + lit * 0.95);
-        const size = 1.15 + lit * 1.35;
-
-        ctx.fillStyle = `rgba(255,255,255,${alpha.toFixed(3)})`;
-        ctx.fillRect(sx, sy, size, size);
       }
 
       raf = requestAnimationFrame(draw);
@@ -219,24 +171,28 @@ export default function Hero() {
       ref={sectionRef}
       className="grain relative flex min-h-[100svh] items-center overflow-hidden bg-ink-950"
     >
-      <canvas
+      {/* Orbital field. Sits above the peak (z-30) so the rings read as
+          foreground instrumentation rather than distant sky. */}
+      <motion.canvas
         ref={canvasRef}
-        className="absolute inset-0 h-full w-full"
+        className="pointer-events-none absolute inset-0 z-[30] h-full w-full"
+        style={{ y: skyY }}
         aria-hidden="true"
       />
 
       <div
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 z-0"
         style={{
           background:
-            "radial-gradient(circle at 50% 50%, transparent 32%, rgba(6,6,6,.7) 80%)",
+            "radial-gradient(circle at 50% 50%, transparent 26%, rgba(6,6,6,.72) 76%)",
         }}
         aria-hidden="true"
       />
 
+      {/* PLANE 2 — type, which the peak will cut across */}
       <motion.div
-        className="relative z-[1] grid w-full grid-cols-1 items-center gap-2 px-[clamp(24px,6.5vw,96px)] md:grid-cols-2 md:gap-6"
-        style={{ y: lift, opacity: fade }}
+        className="relative z-[10] grid w-full grid-cols-1 items-center gap-2 px-[clamp(24px,6.5vw,96px)] md:-mt-[9vh] md:grid-cols-2 md:gap-6"
+        style={{ y: lift, opacity: fade, x: textX }}
       >
         <motion.h1
           className="display text-[clamp(24px,3.4vw,50px)] text-paper"
@@ -277,10 +233,65 @@ export default function Hero() {
         </motion.p>
       </motion.div>
 
+      {/* PLANE 2.5 — haze, so the type recedes into air before the peak */}
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[15] h-[64%]"
+        style={{
+          background:
+            "linear-gradient(to top, rgba(6,6,6,.9) 0%, rgba(6,6,6,.42) 44%, rgba(6,6,6,0) 100%)",
+        }}
+        aria-hidden="true"
+      />
+
+      {/* PLANE 3 — the peak, in front of everything */}
+      <motion.div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[20]"
+        style={{
+          y: peakY,
+          x: peakX,
+          scale: peakScale,
+          transformOrigin: "50% 100%",
+        }}
+        aria-hidden="true"
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 56 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {/* The plate is full-bleed at its natural aspect (~2.21:1, the sky
+              cropped off) and bottom-anchored. Scaled up on narrow screens so
+              the silhouette still reads. Viewports wider than ~2.21:1 will
+              clip the summit slightly; common 16:9 and 16:10 sizes fit. */}
+          <div className="origin-bottom scale-[2.05] sm:scale-[1.45] md:scale-[1.15] lg:scale-100">
+            <Image
+              src="/brand/mountain.webp"
+              alt=""
+              width={2400}
+              height={1085}
+              priority
+              sizes="100vw"
+              className="h-auto w-full select-none object-contain grayscale contrast-[1.08] brightness-[0.82]"
+            />
+          </div>
+        </motion.div>
+      </motion.div>
+
+      {/* base fade, so the snow melts into the section below instead of
+          ending on a hard edge */}
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[25] h-[22%]"
+        style={{
+          background:
+            "linear-gradient(to top, rgba(6,6,6,1) 4%, rgba(6,6,6,0) 100%)",
+        }}
+        aria-hidden="true"
+      />
+
       {/* minimal scroll cue — the rotating seal lives in the section below */}
       <motion.a
         href="#intro"
-        className="absolute bottom-[clamp(24px,5vw,52px)] right-[var(--pad)] z-[2] inline-flex items-center gap-3 font-mono text-[10.5px] uppercase tracking-[0.18em] text-ink-300 transition-colors hover:text-paper"
+        className="absolute bottom-[clamp(24px,5vw,52px)] right-[var(--pad)] z-[40] inline-flex items-center gap-3 font-mono text-[10.5px] uppercase tracking-[0.18em] text-ink-300 transition-colors hover:text-paper"
         style={{ opacity: fade }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
