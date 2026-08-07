@@ -152,6 +152,19 @@ export default function Contact() {
                   </dd>
                 </div>
                 <div>
+                  <dt className="eyebrow mb-1.5 text-ink-400">LinkedIn</dt>
+                  <dd>
+                    <a
+                      href="https://www.linkedin.com/company/scalarinc/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[17px] underline decoration-ink-300 underline-offset-[6px] transition-colors hover:decoration-ink-950"
+                    >
+                      linkedin.com/company/scalarinc
+                    </a>
+                  </dd>
+                </div>
+                <div>
                   <dt className="eyebrow mb-1.5 text-ink-400">Studio</dt>
                   <dd className="text-[15px] text-ink-500">
                     Remote-first, building across five tracks

@@ -1,12 +1,18 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "motion/react";
 
 const COLS = [
   {
     h: "Enquiries",
-    items: [{ label: "hello@scalar.dev", href: "mailto:hello@scalar.dev" }],
+    items: [
+      { label: "hello@scalar.dev", href: "mailto:hello@scalar.dev" },
+      {
+        label: "LinkedIn",
+        href: "https://www.linkedin.com/company/scalarinc/",
+        external: true,
+      },
+    ],
   },
   {
     h: "Sitemap",
@@ -34,22 +40,8 @@ export default function Footer() {
   return (
     <footer className="grain relative overflow-hidden bg-ink-950 pt-[clamp(56px,7vw,110px)] text-paper">
       <div className="shell">
-        {/* oversized mark */}
-        <div className="flex items-center gap-[clamp(12px,2vw,32px)] pb-[clamp(36px,5vw,72px)]">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <Image
-              src="/brand/scalar-mark.png"
-              alt=""
-              width={220}
-              height={220}
-              className="h-[clamp(56px,10vw,140px)] w-auto object-contain"
-            />
-          </motion.div>
+        {/* oversized brand heading */}
+        <div className="pb-[clamp(36px,5vw,72px)]">
           <motion.span
             className="metal metal-sheen font-mark text-[clamp(30px,8.2vw,124px)] uppercase leading-none tracking-[0.04em]"
             initial={{ opacity: 0, y: 30 }}
@@ -57,7 +49,7 @@ export default function Footer() {
             viewport={{ once: true }}
             transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           >
-            Scalar
+            SCALAR INC.
           </motion.span>
         </div>
 
@@ -77,6 +69,8 @@ export default function Footer() {
                   <li key={it.label}>
                     <a
                       href={it.href}
+                      target={it.external ? "_blank" : undefined}
+                      rel={it.external ? "noopener noreferrer" : undefined}
                       className="group inline-flex items-center gap-2 text-[14.5px] text-ink-300 transition-colors hover:text-paper"
                     >
                       <span className="h-px w-0 bg-paper transition-all duration-400 group-hover:w-3" />

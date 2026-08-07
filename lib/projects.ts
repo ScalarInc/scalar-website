@@ -36,9 +36,11 @@ const raw: Omit<Project, "index">[] = [
     track: "Security",
     status: "In build",
     summary:
-      "AI that scans a codebase, predicts where vulnerabilities are likely to surface, and proposes concrete fixes.",
-    problem: "Developers miss security flaws.",
-    audience: "Developers, startups, companies",
+      "An autonomous code intelligence engine that performs deep semantic analysis across entire repositories to detect zero-days, memory safety issues, logic flaws, and supply chain risks before code reaches production. Beyond flagging anomalies, it generates validated, pull-request-ready refactors with full test context.",
+    problem:
+      "Modern software teams ship under intense velocity pressure, causing critical security flaws, race conditions, and architectural oversights to bypass conventional static analysis tools. Manual security audits are slow, expensive, and fail to scale with rapid release cycles.",
+    audience:
+      "Software engineering teams, cybersecurity auditors, DevSecOps units, fast-scaling technology startups, and enterprise software platforms.",
   },
   {
     slug: "ai-urdu-notes-assistant",
@@ -49,11 +51,11 @@ const raw: Omit<Project, "index">[] = [
     track: "Education",
     status: "In build",
     summary:
-      "Records lectures and meetings, converts Urdu and mixed Urdu-English speech into structured notes with headings and summaries, and exports clean PDFs.",
+      "A bilingual AI note-taking intelligence platform specifically fine-tuned for code-switched Urdu and English (Urdish) audio streams. It transcribes, organizes, and distills live lectures and corporate meetings into structured hierarchical notes, key decision items, action matrices, and formatted PDF summaries.",
     problem:
-      "Students and professionals struggle to take organised notes while listening, often missing key points and wasting time rewriting messy notes later.",
+      "Standard voice-to-text tools fail entirely when handling code-switched bilingual dialogue (Urdu-English dialect blend). Students and professionals lose crucial contextual nuances during fast-paced lectures and boardroom discussions, spending hours attempting to transcribe and structure fragmented manual notes.",
     audience:
-      "University students, teachers, and professionals who attend meetings regularly",
+      "University students, academic faculties, corporate executive teams, research personnel, and multilingual organizations operating in South Asia.",
   },
   {
     slug: "ai-rfp-processor",
@@ -64,11 +66,11 @@ const raw: Omit<Project, "index">[] = [
     track: "Enterprise",
     status: "In build",
     summary:
-      "Automates the complete analysis, structuring and response lifecycle of Requests for Proposal.",
+      "An end-to-end enterprise bidding intelligence system that ingests multi-hundred-page Request for Proposal (RFP) documents, parses technical and legal compliance matrices, extracts key deliverables, and drafts hyper-accurate proposal responses using historical win data and internal knowledge bases.",
     problem:
-      "Organisations spend significant time manually reviewing lengthy and complex RFP documents. Critical requirements are scattered across sections, increasing the risk of missed obligations, compliance gaps, pricing errors and delayed submissions.",
+      "Enterprise sales and proposal teams spend weeks manually sifting through complex 200+ page tenders. Unstructured requirements lead to compliance oversights, misaligned pricing models, missed submission deadlines, and lower proposal win rates.",
     audience:
-      "Enterprise sales and bid management teams, government contractors and system integrators",
+      "Enterprise bid desks, defense and government contractors, system integrators, legal compliance officers, and global consulting firms.",
   },
   {
     slug: "network-threat-detection",
@@ -79,11 +81,11 @@ const raw: Omit<Project, "index">[] = [
     track: "Security",
     status: "In build",
     summary:
-      "Analyses network flow logs to detect, classify and investigate cybersecurity threats in real time.",
+      "A high-throughput threat analysis engine that processes gigabytes of network telemetry and flow logs in real time. Applying unsupervised anomaly detection and graph neural networks, it identifies lateral movement, exfiltration patterns, rogue nodes, and sophisticated APTs with sub-second alert latency.",
     problem:
-      "Threat detection and analysis stay manual, stretching response time and leaving gaps in network visibility.",
+      "Traditional Security Information and Event Management (SIEM) systems trigger thousands of false positive alerts daily, overwhelming SOC analysts while sophisticated attackers hide within normal baseline network traffic.",
     audience:
-      "Security Operations Centres, cybersecurity teams, managed security providers, enterprises and government agencies",
+      "Security Operations Centers (SOCs), enterprise cybersecurity teams, Managed Security Service Providers (MSSPs), financial institutions, and critical infrastructure providers.",
   },
   {
     slug: "compliance-evidence-platform",
@@ -94,11 +96,11 @@ const raw: Omit<Project, "index">[] = [
     track: "Enterprise",
     status: "In build",
     summary:
-      "Continuously gathers, validates and organises the evidence needed for audits and certifications.",
+      "An automated compliance governance platform that continuously monitors cloud infrastructure, access controls, and code repositories to automatically gather, cryptographic-stamp, and map evidence against SOC 2, ISO 27001, HIPAA, and GDPR audit frameworks.",
     problem:
-      "Manual evidence gathering dominates audit preparation, costing weeks and introducing accuracy risk.",
+      "Manual evidence gathering dominates audit preparation, costing engineering teams hundreds of hours capturing screenshots, pulling configuration snapshots, and assembling spreadsheets right before certification cycles.",
     audience:
-      "Compliance teams, internal auditors, risk managers, regulated enterprises and consulting firms",
+      "Chief Information Security Officers (CISOs), GRC managers, internal security auditors, and regulated SaaS enterprises.",
   },
   {
     slug: "sign-language-companion",
@@ -109,8 +111,11 @@ const raw: Omit<Project, "index">[] = [
     track: "Accessibility",
     status: "Concept",
     summary:
-      "An app that reads sign language and lets deaf users communicate with people who don't sign — combining computer vision, speech-to-text, text-to-speech and language models. A long-horizon build.",
-    audience: "Deaf and hard-of-hearing users",
+      "A real-time visual translation system powered by edge computer vision and spatial hand tracking. It translates sign language gestures into natural synthesized speech while instantaneously transcribing spoken responses into text and visual sign annotations, enabling fluid bidirectional communication.",
+    problem:
+      "Over 70 million deaf individuals worldwide face immense communication barriers in daily public interactions, healthcare appointments, and professional environments due to a severe shortage of certified sign language interpreters.",
+    audience:
+      "Deaf and hard-of-hearing communities, educational institutions, public service providers, healthcare facilities, and customer service teams.",
   },
   {
     slug: "cloud-fine-tuning-platform",
@@ -121,10 +126,11 @@ const raw: Omit<Project, "index">[] = [
     track: "Platforms",
     status: "In build",
     summary:
-      "Cloud-based virtual pods for generating data and fine-tuning models on demand.",
+      "An elastic infrastructure platform that provisions optimized GPU/CPU computing clusters on demand for LLM fine-tuning, synthetic dataset generation, and hyperparameter optimization, featuring zero-configuration environment setup and automated checkpoint management.",
     problem:
-      "Accessible infrastructure for data generation and fine-tuning on virtual CPUs and GPUs is hard to come by.",
-    audience: "AI developers, data scientists, ML engineers",
+      "AI research teams and developers waste substantial time and capital configuring fragmented cloud GPU environments, managing CUDA dependencies, and struggling with out-of-memory errors during large-scale model optimization runs.",
+    audience:
+      "Machine learning engineers, AI research labs, data science teams, and tech enterprises building proprietary AI models.",
   },
   {
     slug: "ai-shorts-generation",
@@ -135,9 +141,11 @@ const raw: Omit<Project, "index">[] = [
     track: "Platforms",
     status: "In build",
     summary:
-      "Generates explainer videos and short-form stories, then publishes them straight to YouTube, Instagram and other channels through automation.",
-    problem: "Manual video creation and uploading takes too much time.",
-    audience: "Content creators, marketers",
+      "An automated media engine that converts raw scripts or long-form video content into engaging, publication-ready short videos. It handles voiceover generation, motion typography, visual scene stitching, dynamic captions, and multi-channel automated social distribution.",
+    problem:
+      "Creating viral, high-quality short-form content for platforms like YouTube Shorts, TikTok, and Reels demands hours of tedious video editing, audio sync, caption styling, and multi-platform publishing per video.",
+    audience:
+      "Digital media agencies, content creators, brand marketing teams, educational publishers, and social media managers.",
   },
   {
     slug: "3d-virtual-rooms",
@@ -148,10 +156,11 @@ const raw: Omit<Project, "index">[] = [
     track: "Platforms",
     status: "In build",
     summary:
-      "Turns real hotel rooms into interactive 3D tours from ordinary phone or camera capture, so guests can walk a room before they book it.",
+      "A spatial computing platform that constructs photorealistic, interactive 3D digital twins of hotel rooms and luxury rentals directly from standard smartphone videos, offering prospective guests immersive spatial walkthroughs prior to booking.",
     problem:
-      "Hotel sites rely on static, sometimes misleading 2D images. Guests don't trust what they see, which drives poor booking decisions, bad reviews and cancellations.",
-    audience: "Hotels, Airbnb hosts, resorts, travel agencies",
+      "Hospitality platforms depend on static 2D photographs that fail to convey space, lighting, layout, and room condition, leading to traveler hesitation, low booking conversion rates, and negative post-stay reviews.",
+    audience:
+      "Boutique hotels, luxury resort operators, vacation rental hosts, real estate agencies, and online travel platforms.",
   },
   {
     slug: "playhub-courtbook",
@@ -162,10 +171,11 @@ const raw: Omit<Project, "index">[] = [
     track: "Platforms",
     status: "In build",
     summary:
-      "One app listing every futsal, football and padel court in a city, with live availability and instant slot booking.",
+      "A unified sports venue management and marketplace ecosystem that aggregates local athletic facilities (futsal, padel, tennis, football), syncing venue calendars in real time for instant online reservations and split-payment transactions.",
     problem:
-      "Booking runs on calls and WhatsApp, which produces double bookings, confusion, no transparency and wasted time.",
-    audience: "Court owners, players",
+      "Recreational sports bookings still operate through fragmented phone calls, WhatsApp messages, and manual ledgers, resulting in frequent double-bookings, uncollected reservation fees, and operational headaches for venue operators.",
+    audience:
+      "Sports facility owners, venue managers, recreational athletes, local tournament organizers, and sports clubs.",
   },
   {
     slug: "special-education-case-manager",
@@ -176,11 +186,11 @@ const raw: Omit<Project, "index">[] = [
     track: "Education",
     status: "In build",
     summary:
-      "An agent system that automates IEP drafting, progress monitoring, compliance tracking, parent communication and meeting coordination for special education teachers in K-12 schools.",
+      "An intelligent workflow automation platform tailored for K-12 special education administration. It automates Individualized Education Program (IEP) drafting, goal progress tracking, legal federal compliance validation, and multi-stakeholder parent-teacher communication.",
     problem:
-      "Special education teachers spend 60% of their time on paperwork instead of teaching. Children with disabilities don't receive the services they are legally entitled to, and districts lose both teachers and due process lawsuits.",
+      "Special education educators spend up to 60% of their working hours trapped in complex compliance paperwork rather than working directly with students, triggering severe burnout, high teacher turnover, and costly school district due-process litigation.",
     audience:
-      "Directors of Special Education at mid-sized US public school districts (5,000–15,000 students), case managers and special education teachers",
+      "Directors of Special Education, K-12 public school district administrators, case managers, IEP coordinators, and special education teachers.",
   },
   {
     slug: "ai-life-companion",
@@ -191,11 +201,11 @@ const raw: Omit<Project, "index">[] = [
     track: "Accessibility",
     status: "In build",
     summary:
-      "One app that manages daily routines, practises therapy goals through games, supports communication, tracks behaviour, and connects parents with therapists and schools.",
+      "An integrated therapeutic assistant and daily care management hub designed for neurodivergent children. It unifies routine scheduling, gamified therapy reinforcement, assistive communication, behavioral logging, and multi-provider data sharing.",
     problem:
-      "Families manage a disabled child's life across 16 fragmented apps and notebooks. Therapists work in silos, children don't get consistent support, and parents burn out.",
+      "Parents of children with special needs must coordinate daily life across dozens of disconnected notebooks, apps, therapy guidelines, and school reports, leading to fragmented care and extreme parental exhaustion.",
     audience:
-      "Parents of children with autism, ADHD or Down syndrome, therapy providers and special education teachers",
+      "Parents and caregivers of children with neurodevelopmental needs (Autism, ADHD, Down Syndrome), pediatric occupational therapists, speech pathologists, and special education professionals.",
   },
 ];
 
