@@ -22,6 +22,7 @@
   --color-paper-dim: #e7e7e4;
 
   --font-display: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+  --font-serif: var(--font-serif), Georgia, serif;
   --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-mark: var(--font-michroma), var(--font-inter), "Helvetica Neue", Arial, sans-serif;
 

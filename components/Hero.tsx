@@ -2,7 +2,32 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion, useScroll, useSpring, useTransform } from "motion/react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "motion/react";
+
+/* A deliberately sparse scatter of stars for the open sky. Positions are
+ * hand-placed rather than random so they stay irregular across reloads and
+ * keep clear of the peak's silhouette. */
+const STARS = [
+  { x: 5.5, y: 26, s: 1.5, o: 0.4, d: 5.2, delay: 0.4 },
+  { x: 12, y: 11, s: 2, o: 0.62, d: 3.8, delay: 1.7 },
+  { x: 19.5, y: 37, s: 1.5, o: 0.32, d: 6.1, delay: 0.9 },
+  { x: 27, y: 8, s: 2.5, o: 0.72, d: 4.4, delay: 2.6 },
+  { x: 34, y: 22, s: 1.5, o: 0.38, d: 5.6, delay: 0.2 },
+  { x: 44, y: 6, s: 2, o: 0.55, d: 4.9, delay: 3.1 },
+  { x: 52.5, y: 31, s: 1.5, o: 0.3, d: 6.4, delay: 1.3 },
+  { x: 61, y: 13, s: 2.5, o: 0.68, d: 4.1, delay: 2.2 },
+  { x: 69.5, y: 40, s: 1.5, o: 0.34, d: 5.9, delay: 0.7 },
+  { x: 76, y: 19, s: 2, o: 0.58, d: 4.6, delay: 3.4 },
+  { x: 84.5, y: 7, s: 1.5, o: 0.42, d: 5.4, delay: 1.1 },
+  { x: 91, y: 29, s: 2.5, o: 0.7, d: 3.9, delay: 2.9 },
+  { x: 96.5, y: 15, s: 1.5, o: 0.36, d: 6.2, delay: 0.5 },
+];
 
 /**
  * Hero: a rotating point-cloud sphere ringed by dotted orbits and crosshair
@@ -12,6 +37,7 @@ export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
   const pointer = useRef({ x: 0, y: 0 });
+  const reduceMotion = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -189,6 +215,41 @@ export default function Hero() {
         aria-hidden="true"
       />
 
+      {/* PLANE 0.5 — stars. Behind the type and the peak, so they only ever
+          show through open sky. They ride the same drift as the canvas. */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 z-[5]"
+        style={{ y: skyY }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.4, delay: 0.6 }}
+        aria-hidden="true"
+      >
+        {STARS.map((st) => (
+          <motion.span
+            key={`${st.x}-${st.y}`}
+            className="absolute rounded-full bg-white"
+            style={{
+              left: `${st.x}%`,
+              top: `${st.y}%`,
+              width: st.s,
+              height: st.s,
+              opacity: st.o,
+              boxShadow: `0 0 ${st.s * 2.5}px rgba(255,255,255,.4)`,
+            }}
+            animate={
+              reduceMotion ? undefined : { opacity: [st.o, st.o * 0.3, st.o] }
+            }
+            transition={{
+              duration: st.d,
+              delay: st.delay,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </motion.div>
+
       {/* PLANE 2 — type, which the peak will cut across */}
       <motion.div
         className="relative z-[10] grid w-full grid-cols-1 items-center gap-2 px-[clamp(24px,6.5vw,96px)] md:-mt-[9vh] md:grid-cols-2 md:gap-6"
@@ -200,10 +261,12 @@ export default function Hero() {
           animate="shown"
           transition={{ staggerChildren: 0.09, delayChildren: 0.25 }}
         >
-          {["Solving", "Complexity"].map((t) => (
-            <span key={t} className="block overflow-hidden">
+          {["Solving", "Complexity"].map((t, i) => (
+            <span key={t} className="block overflow-hidden pb-4 -mb-4">
               <motion.span
-                className="block"
+                className={`block ${
+                  i === 1 ? "italic font-serif font-normal normal-case text-[1.1em] tracking-tight text-paper/95 leading-normal pb-1" : ""
+                }`}
                 variants={word}
                 transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
               >
@@ -220,9 +283,13 @@ export default function Hero() {
           transition={{ staggerChildren: 0.09, delayChildren: 0.43 }}
         >
           {["Delivering", "Clarity"].map((t, i) => (
-            <span key={t} className="block overflow-hidden">
+            <span key={t} className="block overflow-hidden pb-4 -mb-4">
               <motion.span
-                className={`block ${i === 1 ? "metal metal-sheen" : ""}`}
+                className={`block ${
+                  i === 0
+                    ? "italic font-serif font-normal normal-case text-[1.1em] tracking-tight text-paper/95 leading-normal pb-1"
+                    : "metal metal-sheen"
+                }`}
                 variants={word}
                 transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
               >
@@ -277,13 +344,12 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* base fade, so the snow melts into the section below instead of
-          ending on a hard edge */}
+      {/* base fade, so the snow melts seamlessly into the section below */}
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[25] h-[22%]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[25] h-[32%]"
         style={{
           background:
-            "linear-gradient(to top, rgba(6,6,6,1) 4%, rgba(6,6,6,0) 100%)",
+            "linear-gradient(to bottom, rgba(6,6,6,0) 0%, rgba(6,6,6,0.5) 45%, rgba(12,12,12,0.85) 75%, var(--color-ink-900) 100%)",
         }}
         aria-hidden="true"
       />

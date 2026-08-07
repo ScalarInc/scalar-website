@@ -58,7 +58,16 @@ export default function Intro() {
       id="intro"
       className="grain relative overflow-hidden bg-ink-900 py-[clamp(72px,10vw,150px)] text-paper"
     >
-      <div className="shell">
+      {/* Top transition blend from Hero */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-[clamp(40px,6vw,90px)]"
+        style={{
+          background:
+            "linear-gradient(to bottom, var(--color-ink-900) 0%, rgba(12,12,12,0.5) 60%, transparent 100%)",
+        }}
+        aria-hidden="true"
+      />
+      <div className="shell relative z-[2]">
         <div className="grid gap-[clamp(36px,5vw,80px)] lg:grid-cols-[1.25fr_0.75fr]">
           {/* Headline. The whileInView trigger sits on the <h2>, not on the
               masked lines — a clipped child never intersects, so putting it

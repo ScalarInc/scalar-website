@@ -95,7 +95,7 @@ export default function Approach() {
         </Reveal>
         <Reveal delay={0.08}>
           <h2 className="display mb-[clamp(36px,4.4vw,68px)] text-[clamp(28px,3.8vw,54px)]">
-            Think outside the box
+            Think <span className="italic font-serif font-normal normal-case text-[1.08em] tracking-tight text-ink-950/90">outside</span> the box
           </h2>
         </Reveal>
 

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono, Michroma } from "next/font/google";
+import { Inter, JetBrains_Mono, Michroma, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import Header from "@/components/Header";
@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
   variable: "--font-inter",
   display: "swap",
 });
@@ -24,6 +25,14 @@ const michroma = Michroma({
   subsets: ["latin"],
   weight: ["400"],
   variable: "--font-michroma",
+  display: "swap",
+});
+
+const serif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: ["400"],
+  style: ["italic", "normal"],
+  variable: "--font-serif",
   display: "swap",
 });
 
@@ -53,7 +62,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrains.variable} ${michroma.variable}`}
+      className={`${inter.variable} ${jetbrains.variable} ${michroma.variable} ${serif.variable}`}
     >
       <body>
         <SmoothScroll />

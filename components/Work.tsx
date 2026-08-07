@@ -195,7 +195,7 @@ export default function Work() {
               <h2 className="display text-[clamp(26px,3.4vw,48px)]">
                 {projects.length} products
                 <br />
-                in motion.
+                <span className="italic font-serif font-normal normal-case text-[1.08em] tracking-tight text-paper/95">in motion.</span>
               </h2>
             </Reveal>
           </div>

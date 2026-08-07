@@ -71,7 +71,7 @@ export default function Capabilities() {
             </Reveal>
             <Reveal delay={0.08}>
               <h2 className="display text-[clamp(26px,3.4vw,48px)]">
-                Hard problems.
+                <span className="italic font-serif font-normal normal-case text-[1.08em] tracking-tight text-ink-950/90">Hard problems.</span>
                 <br />
                 Systems that hold.
               </h2>
