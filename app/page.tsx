@@ -1,4 +1,5 @@
 import Hero from "@/components/Hero";
+import Intro from "@/components/Intro";
 import Capabilities from "@/components/Capabilities";
 import Approach from "@/components/Approach";
 import Partnering from "@/components/Partnering";
@@ -10,6 +11,7 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <Intro />
       <Capabilities />
       <Approach />
       <Partnering />

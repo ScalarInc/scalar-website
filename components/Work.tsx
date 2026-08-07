@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { projects, tracks, type Project, type Track } from "@/lib/projects";
 import Reveal from "./ui/Reveal";
@@ -54,12 +54,17 @@ function Detail({
   project: Project;
   onClose: () => void;
 }) {
+  const panelRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", onKey);
     document.body.classList.add("is-locked");
+    // Move focus into the dialog so PageDown/arrows scroll the panel rather
+    // than doing nothing, and so screen readers land in the right place.
+    panelRef.current?.focus();
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.classList.remove("is-locked");
@@ -83,8 +88,13 @@ function Detail({
       />
 
       <motion.div
+        ref={panelRef}
+        tabIndex={-1}
         layoutId={`card-${project.slug}`}
-        className="relative max-h-[88vh] w-full max-w-[820px] overflow-y-auto border border-ink-700 bg-ink-900 p-[clamp(24px,3.2vw,52px)]"
+        /* data-lenis-prevent hands the wheel back to this element, otherwise
+           smooth scroll swallows it and the page moves behind the dialog. */
+        data-lenis-prevent
+        className="relative max-h-[88vh] w-full max-w-[820px] overflow-y-auto overscroll-contain border border-ink-700 bg-ink-900 p-[clamp(24px,3.2vw,52px)] outline-none"
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="flex items-start justify-between gap-6">
@@ -184,7 +194,7 @@ export default function Work() {
             </Reveal>
             <Reveal delay={0.08}>
               <h2 className="display text-[clamp(26px,3.4vw,48px)]">
-                Fourteen products
+                {projects.length} products
                 <br />
                 in motion.
               </h2>

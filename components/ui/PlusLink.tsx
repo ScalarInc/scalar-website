@@ -30,7 +30,8 @@ export default function PlusLink({
         <span className="absolute h-px w-3 bg-current" />
         <span className="absolute h-3 w-px bg-current" />
       </motion.span>
-      <span className="relative overflow-hidden">
+      {/* inline-block so overflow actually clips the hover clone */}
+      <span className="relative inline-block overflow-hidden">
         <span className="block transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-full">
           {children}
         </span>

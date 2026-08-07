@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Michroma } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import Header from "@/components/Header";
@@ -16,6 +16,14 @@ const jetbrains = JetBrains_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-jetbrains",
+  display: "swap",
+});
+
+/** Squared techno face used for the Scalar wordmark. */
+const michroma = Michroma({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-michroma",
   display: "swap",
 });
 
@@ -43,7 +51,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrains.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${jetbrains.variable} ${michroma.variable}`}
+    >
       <body>
         <SmoothScroll />
         <a

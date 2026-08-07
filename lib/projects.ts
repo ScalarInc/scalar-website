@@ -22,11 +22,13 @@ export interface Project {
 /**
  * Source: scalar-assests/projects.xlsx
  * Copy lightly edited for consistency of tense and punctuation.
+ *
+ * `index` is derived from position rather than stored, so adding or removing
+ * a project renumbers the whole list automatically.
  */
-export const projects: Project[] = [
+const raw: Omit<Project, "index">[] = [
   {
     slug: "ai-bug-vulnerability-detector",
-    index: "01",
     name: "AI Bug & Vulnerability Detector",
     lead: "Abdullah",
     sector: "Cybersecurity",
@@ -40,7 +42,6 @@ export const projects: Project[] = [
   },
   {
     slug: "ai-urdu-notes-assistant",
-    index: "02",
     name: "AI Urdu Notes Assistant",
     lead: "Abdullah",
     sector: "EdTech / Productivity",
@@ -56,7 +57,6 @@ export const projects: Project[] = [
   },
   {
     slug: "ai-rfp-processor",
-    index: "03",
     name: "AI RFP Processor",
     lead: "Ahmed",
     sector: "Enterprise AI / GovTech",
@@ -71,23 +71,7 @@ export const projects: Project[] = [
       "Enterprise sales and bid management teams, government contractors and system integrators",
   },
   {
-    slug: "smart-ops",
-    index: "04",
-    name: "Smart Ops",
-    lead: "Abdullah",
-    sector: "BusinessTech",
-    kind: "Product",
-    track: "Enterprise",
-    status: "In build",
-    summary:
-      "Connects spreadsheets to a central system that tracks changes, enforces structure, auto-processes data and handles sharing, version control and report distribution — while teams keep working in Excel.",
-    problem:
-      "Businesses rely on messy Excel files shared manually, leading to errors, duplication, lack of visibility and inefficiency.",
-    audience: "SMEs, hotels, restaurants, small companies",
-  },
-  {
     slug: "network-threat-detection",
-    index: "05",
     name: "AI Network Threat Detection",
     lead: "Ahmed",
     sector: "Cybersecurity / Network Analytics",
@@ -103,7 +87,6 @@ export const projects: Project[] = [
   },
   {
     slug: "compliance-evidence-platform",
-    index: "06",
     name: "Automated Compliance Evidence Collection",
     lead: "Ahmed",
     sector: "RegTech / Compliance Automation",
@@ -119,7 +102,6 @@ export const projects: Project[] = [
   },
   {
     slug: "sign-language-companion",
-    index: "07",
     name: "Sign Language Companion",
     lead: "Hasnain",
     sector: "Mobile / Accessibility",
@@ -132,7 +114,6 @@ export const projects: Project[] = [
   },
   {
     slug: "cloud-fine-tuning-platform",
-    index: "08",
     name: "Cloud Fine-Tuning Platform",
     lead: "Safwan",
     sector: "Cloud Infrastructure",
@@ -147,7 +128,6 @@ export const projects: Project[] = [
   },
   {
     slug: "ai-shorts-generation",
-    index: "09",
     name: "AI Shorts Generation",
     lead: "Safwan",
     sector: "AI Content",
@@ -161,7 +141,6 @@ export const projects: Project[] = [
   },
   {
     slug: "3d-virtual-rooms",
-    index: "10",
     name: "3D Virtual Room Experience",
     lead: "Hasnain",
     sector: "TravelTech",
@@ -176,7 +155,6 @@ export const projects: Project[] = [
   },
   {
     slug: "playhub-courtbook",
-    index: "11",
     name: "PlayHub / CourtBook",
     lead: "Hasnain",
     sector: "SportsTech",
@@ -191,7 +169,6 @@ export const projects: Project[] = [
   },
   {
     slug: "special-education-case-manager",
-    index: "12",
     name: "AI Special Education Case Manager",
     lead: "Ali Taha",
     sector: "EdTech / Special Education",
@@ -206,24 +183,7 @@ export const projects: Project[] = [
       "Directors of Special Education at mid-sized US public school districts (5,000–15,000 students), case managers and special education teachers",
   },
   {
-    slug: "hotel-management-simulator",
-    index: "13",
-    name: "AI Hotel Management Simulator",
-    lead: "Ahmed",
-    sector: "EdTech / Hospitality",
-    kind: "Product",
-    track: "Education",
-    status: "In build",
-    summary:
-      "A training simulator that replicates hotel management workflows, using intelligent agents to play guests, staff operations and system behaviour.",
-    problem:
-      "Hands-on training normally requires access to expensive enterprise systems, so most students never touch the real workflow.",
-    audience:
-      "Hospitality students, hotel management institutes, training academies and entry-level staff onboarding",
-  },
-  {
     slug: "ai-life-companion",
-    index: "14",
     name: "AI Life Companion for Disabled Kids",
     lead: "Ali Taha",
     sector: "SpecialNeeds / EdTech",
@@ -238,6 +198,11 @@ export const projects: Project[] = [
       "Parents of children with autism, ADHD or Down syndrome, therapy providers and special education teachers",
   },
 ];
+
+export const projects: Project[] = raw.map((p, i) => ({
+  ...p,
+  index: String(i + 1).padStart(2, "0"),
+}));
 
 export const tracks: Track[] = [
   "Security",

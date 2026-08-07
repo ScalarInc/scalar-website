@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Image from "next/image";
-import { motion, useScroll, useTransform, useSpring } from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
 
 /**
- * Hero composition: a dotted orbital field rendered to canvas, the Scalar mark
- * floating at its centre, and the tagline split either side of it.
+ * Hero: a rotating point-cloud sphere ringed by dotted orbits and crosshair
+ * markers, with the tagline split either side of it.
  */
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -20,23 +19,17 @@ export default function Hero() {
 
   const fade = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
   const lift = useTransform(scrollYProgress, [0, 1], [0, -110]);
-  const markScale = useTransform(scrollYProgress, [0, 1], [1, 1.35]);
-
-  // Pointer parallax, damped so it glides rather than snaps.
-  const px = useSpring(0, { stiffness: 60, damping: 20 });
-  const py = useSpring(0, { stiffness: 60, damping: 20 });
 
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
-      const nx = e.clientX / window.innerWidth - 0.5;
-      const ny = e.clientY / window.innerHeight - 0.5;
-      pointer.current = { x: nx, y: ny };
-      px.set(nx * 26);
-      py.set(ny * 20);
+      pointer.current = {
+        x: e.clientX / window.innerWidth - 0.5,
+        y: e.clientY / window.innerHeight - 0.5,
+      };
     };
     window.addEventListener("pointermove", onMove);
     return () => window.removeEventListener("pointermove", onMove);
-  }, [px, py]);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -52,28 +45,49 @@ export default function Hero() {
     let cy = 0;
     let base = 0;
     let raf = 0;
+    let spin = 0;
+    let last = 0;
 
+    /* -- point cloud: latitude-banded, irregular body -------------------
+     * Points sit on latitude rings (not a fibonacci scatter) so the surface
+     * shows curved rows as it turns, and the radius is displaced by stacked
+     * sinusoids to give the lumpy, asteroid-like silhouette of the reference.
+     * ------------------------------------------------------------------ */
+    const bump = (x: number, y: number, z: number) =>
+      0.5 * Math.sin(2.1 * x + 1.3) * Math.sin(1.7 * y + 0.4) * Math.sin(2.3 * z + 2.1) +
+      0.3 * Math.sin(4.3 * x + 0.7) * Math.sin(3.1 * y + 2.2) * Math.sin(3.7 * z + 0.9) +
+      0.2 * Math.sin(7.1 * x) * Math.sin(6.3 * y) * Math.sin(5.9 * z);
+
+    const BANDS = 58;
+    const cloud: { x: number; y: number; z: number }[] = [];
+    for (let b = 0; b < BANDS; b++) {
+      const theta = ((b + 0.5) / BANDS) * Math.PI;
+      const ringR = Math.sin(theta);
+      const count = Math.max(3, Math.round(78 * ringR));
+      for (let k = 0; k < count; k++) {
+        // offset each band so the rows read as a weave, not a grid
+        const phi = (k / count) * Math.PI * 2 + b * 0.35;
+        const ux = ringR * Math.cos(phi);
+        const uy = Math.cos(theta);
+        const uz = ringR * Math.sin(phi);
+        const r = 1 + 0.17 * bump(ux, uy, uz);
+        cloud.push({ x: ux * r, y: uy * r, z: uz * r });
+      }
+    }
+
+    /* -- orbital rings -------------------------------------------------- */
     const RINGS = [
-      { r: 1.55, dots: 160, speed: 0.000185, alpha: 0.5, tilt: 0.1 },
-      { r: 2.0, dots: 205, speed: -0.00014, alpha: 0.4, tilt: -0.06 },
-      { r: 2.5, dots: 250, speed: 0.000105, alpha: 0.3, tilt: 0.05 },
-      { r: 3.05, dots: 300, speed: -0.00008, alpha: 0.2, tilt: -0.08 },
+      { r: 1.5, dots: 160, speed: 0.00019, alpha: 0.5, tilt: 0.1 },
+      { r: 1.95, dots: 205, speed: -0.00014, alpha: 0.4, tilt: -0.06 },
+      { r: 2.45, dots: 250, speed: 0.00011, alpha: 0.3, tilt: 0.05 },
+      { r: 3.0, dots: 300, speed: -0.00008, alpha: 0.2, tilt: -0.08 },
     ];
 
     const MARKERS = [
-      { ring: 3, base: 0.6, sweep: 0.3, speed: 0.00022 },
-      { ring: 2, base: 2.34, sweep: 0.26, speed: 0.00017 },
-      { ring: 1, base: 1.4, sweep: 0.34, speed: 0.00013 },
+      { ring: 3, base: 0.62, sweep: 0.3, speed: 0.00021 },
+      { ring: 2, base: 2.32, sweep: 0.26, speed: 0.00016 },
+      { ring: 1, base: 1.38, sweep: 0.34, speed: 0.00012 },
     ];
-
-    // Slow drifting dust across the whole field
-    const DUST = Array.from({ length: 90 }, () => ({
-      x: Math.random(),
-      y: Math.random(),
-      z: Math.random(),
-      vx: (Math.random() - 0.5) * 0.00004,
-      vy: (Math.random() - 0.5) * 0.00003,
-    }));
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -84,29 +98,20 @@ export default function Hero() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       cx = w / 2;
       cy = h / 2;
-      base = Math.min(w, h) * 0.118;
+      base = Math.min(w, h) * 0.132;
     };
 
     const draw = (now: number) => {
+      const dt = last ? Math.min(now - last, 48) : 16;
+      last = now;
+      spin += dt * 0.00016;
+
       ctx.clearRect(0, 0, w, h);
 
       const ox = pointer.current.x * 22;
       const oy = pointer.current.y * 16;
 
-      // dust
-      for (const d of DUST) {
-        d.x += d.vx;
-        d.y += d.vy;
-        if (d.x < 0) d.x += 1;
-        if (d.x > 1) d.x -= 1;
-        if (d.y < 0) d.y += 1;
-        if (d.y > 1) d.y -= 1;
-        const a = 0.06 + d.z * 0.16;
-        ctx.fillStyle = `rgba(255,255,255,${a.toFixed(3)})`;
-        ctx.fillRect(d.x * w + ox * d.z, d.y * h + oy * d.z, 1.3, 1.3);
-      }
-
-      // orbital rings
+      /* rings */
       RINGS.forEach((ring, ri) => {
         const rr = base * ring.r;
         const phase = now * ring.speed;
@@ -120,7 +125,7 @@ export default function Hero() {
         }
       });
 
-      // crosshair markers with angular readouts
+      /* crosshair markers with angular readouts */
       if (w >= 900) {
         for (const m of MARKERS) {
           const rr = base * RINGS[m.ring].r;
@@ -128,7 +133,7 @@ export default function Hero() {
           const x = cx + Math.cos(a) * rr + ox;
           const y = cy + Math.sin(a) * rr + oy;
 
-          ctx.strokeStyle = "rgba(255,255,255,.72)";
+          ctx.strokeStyle = "rgba(255,255,255,.7)";
           ctx.lineWidth = 1.3;
           ctx.beginPath();
           ctx.moveTo(x - 7, y);
@@ -137,15 +142,52 @@ export default function Hero() {
           ctx.lineTo(x, y + 7);
           ctx.stroke();
 
-          const deg = (((a * 180) / Math.PI) % 360 + 360) % 360;
+          const deg = ((((a * 180) / Math.PI) % 360) + 360) % 360;
           const rad = ((a % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
           ctx.font =
-            '10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+            "10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
           ctx.fillStyle = "rgba(255,255,255,.34)";
           ctx.textAlign = "left";
           ctx.fillText(`${deg.toFixed(1)}°`, x + 15, y - 2);
           ctx.fillText(`${rad.toFixed(3)} rad`, x + 15, y + 11);
         }
+      }
+
+      /* the sphere */
+      const sin = Math.sin(spin);
+      const cos = Math.cos(spin);
+      const tiltS = Math.sin(0.42);
+      const tiltC = Math.cos(0.42);
+
+      // key light from upper-left-front
+      const LX = -0.42;
+      const LY = -0.55;
+      const LZ = 0.72;
+
+      for (const p of cloud) {
+        const x1 = p.x * cos + p.z * sin;
+        const z1 = -p.x * sin + p.z * cos;
+        const y2 = p.y * tiltC - z1 * tiltS;
+        const z2 = p.y * tiltS + z1 * tiltC;
+
+        // opaque body: drop the far hemisphere, keeping a little of the rim
+        if (z2 < -0.05) continue;
+
+        const persp = 1 / (1.9 - z2 * 0.42);
+        const sx = cx + x1 * base * persp * 2.35 + ox;
+        const sy = cy + y2 * base * persp * 2.35 + oy;
+
+        // lambert against the rotated normal (which is the point itself)
+        const len = Math.hypot(x1, y2, z2) || 1;
+        const lambert = (x1 * LX + y2 * LY + z2 * LZ) / len;
+        const front = (z2 + 1) / 2;
+
+        const lit = Math.max(0, lambert) * 0.85 + front * 0.3;
+        const alpha = Math.min(1, 0.05 + lit * 0.95);
+        const size = 1.15 + lit * 1.35;
+
+        ctx.fillStyle = `rgba(255,255,255,${alpha.toFixed(3)})`;
+        ctx.fillRect(sx, sy, size, size);
       }
 
       raf = requestAnimationFrame(draw);
@@ -183,45 +225,15 @@ export default function Hero() {
         aria-hidden="true"
       />
 
-      {/* vignette */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(circle at 50% 50%, transparent 30%, rgba(6,6,6,.72) 78%)",
+            "radial-gradient(circle at 50% 50%, transparent 32%, rgba(6,6,6,.7) 80%)",
         }}
         aria-hidden="true"
       />
 
-      {/* the mark */}
-      <motion.div
-        className="pointer-events-none absolute inset-0 grid place-items-center"
-        style={{ x: px, y: py, scale: markScale, opacity: fade }}
-        aria-hidden="true"
-      >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.82 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
-          className="relative"
-        >
-          <motion.div
-            animate={{ y: [0, -14, 0] }}
-            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <Image
-              src="/brand/scalar-mark.png"
-              alt=""
-              width={520}
-              height={520}
-              priority
-              className="h-[clamp(150px,21vw,290px)] w-auto object-contain"
-            />
-          </motion.div>
-        </motion.div>
-      </motion.div>
-
-      {/* tagline, split either side of the mark */}
       <motion.div
         className="relative z-[1] grid w-full grid-cols-1 items-center gap-2 px-[clamp(20px,9.5vw,150px)] md:grid-cols-2 md:gap-8"
         style={{ y: lift, opacity: fade }}
@@ -232,24 +244,17 @@ export default function Hero() {
           animate="shown"
           transition={{ staggerChildren: 0.09, delayChildren: 0.25 }}
         >
-          <span className="block overflow-hidden">
-            <motion.span
-              className="block"
-              variants={word}
-              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            >
-              Built
-            </motion.span>
-          </span>
-          <span className="block overflow-hidden">
-            <motion.span
-              className="block"
-              variants={word}
-              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            >
-              For
-            </motion.span>
-          </span>
+          {["Solving", "Complexity"].map((t) => (
+            <span key={t} className="block overflow-hidden">
+              <motion.span
+                className="block"
+                variants={word}
+                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {t}
+              </motion.span>
+            </span>
+          ))}
         </motion.h1>
 
         <motion.p
@@ -258,68 +263,30 @@ export default function Hero() {
           animate="shown"
           transition={{ staggerChildren: 0.09, delayChildren: 0.43 }}
         >
-          <span className="block overflow-hidden">
-            <motion.span
-              className="block"
-              variants={word}
-              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            >
-              What&rsquo;s
-            </motion.span>
-          </span>
-          <span className="block overflow-hidden">
-            <motion.span
-              className="metal metal-sheen block"
-              variants={word}
-              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            >
-              Next.
-            </motion.span>
-          </span>
+          {["Delivering", "Clarity"].map((t, i) => (
+            <span key={t} className="block overflow-hidden">
+              <motion.span
+                className={`block ${i === 1 ? "metal metal-sheen" : ""}`}
+                variants={word}
+                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {t}
+              </motion.span>
+            </span>
+          ))}
         </motion.p>
       </motion.div>
 
-      {/* rotating scroll badge */}
+      {/* minimal scroll cue — the rotating seal lives in the section below */}
       <motion.a
-        href="#capabilities"
-        className="absolute bottom-[clamp(24px,5vw,56px)] right-[var(--pad)] z-[2] grid h-[104px] w-[104px] place-items-center text-ink-200"
+        href="#intro"
+        className="absolute bottom-[clamp(24px,5vw,52px)] right-[var(--pad)] z-[2] inline-flex items-center gap-3 font-mono text-[10.5px] uppercase tracking-[0.18em] text-ink-300 transition-colors hover:text-paper"
         style={{ opacity: fade }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2, duration: 0.8 }}
-        aria-label="Scroll to capabilities"
       >
-        <motion.svg
-          viewBox="0 0 120 120"
-          className="absolute h-full w-full"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
-        >
-          <defs>
-            <path
-              id="badgeCircle"
-              d="M60,60 m-43,0 a43,43 0 1,1 86,0 a43,43 0 1,1 -86,0"
-            />
-          </defs>
-          <circle
-            cx="60"
-            cy="60"
-            r="55"
-            fill="none"
-            stroke="currentColor"
-            strokeOpacity=".3"
-          />
-          <text
-            fontFamily="var(--font-jetbrains), monospace"
-            fontSize="9.5"
-            letterSpacing="3.2"
-            fill="currentColor"
-          >
-            <textPath href="#badgeCircle" startOffset="0">
-              SCROLL · TO · EXPLORE · SCROLL · TO · EXPLORE ·
-            </textPath>
-          </text>
-        </motion.svg>
+        Scroll
         <motion.span
           className="relative grid h-4 w-4 place-items-center"
           animate={{ y: [0, 5, 0] }}

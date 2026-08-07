@@ -23,6 +23,7 @@
 
   --font-display: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-mark: var(--font-michroma), var(--font-inter), "Helvetica Neue", Arial, sans-serif;
 
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
 }

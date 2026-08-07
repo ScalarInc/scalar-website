@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
+import { projects } from "@/lib/projects";
 
 const NAV = [
   { label: "Capabilities", href: "#capabilities", idx: "01" },
@@ -15,11 +16,25 @@ const NAV = [
 
 export default function Header() {
   const [stuck, setStuck] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
+  const lastY = useRef(0);
 
   useEffect(() => {
-    const onScroll = () => setStuck(window.scrollY > 40);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setStuck(y > 40);
+
+      // Once past the hero, retreat on the way down and return on the way up,
+      // so long reading stretches stay uninterrupted.
+      const delta = y - lastY.current;
+      if (Math.abs(delta) > 6) {
+        setHidden(y > 600 && delta > 0);
+        lastY.current = y;
+      }
+    };
     onScroll();
+    lastY.current = window.scrollY;
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -38,7 +53,9 @@ export default function Header() {
 
   return (
     <>
-      <header
+      <motion.header
+        animate={{ y: hidden && !open ? "-105%" : "0%" }}
+        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         className={`fixed inset-x-0 top-0 z-[90] flex items-center transition-[background-color,height,border-color] duration-500 ${
           stuck
             ? "h-[72px] border-b border-ink-800 bg-ink-950/95 backdrop-blur-sm"
@@ -59,7 +76,7 @@ export default function Header() {
               priority
               className="h-9 w-9 object-contain transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
             />
-            <span className="metal metal-sheen text-[19px] font-semibold uppercase tracking-[0.34em] leading-none">
+            <span className="metal metal-sheen font-mark text-[clamp(14px,1.25vw,18px)] uppercase tracking-[0.14em] leading-none">
               Scalar
             </span>
           </Link>
@@ -81,7 +98,7 @@ export default function Header() {
             </motion.span>
           </button>
         </div>
-      </header>
+      </motion.header>
 
       <AnimatePresence>
         {open && (
@@ -154,7 +171,7 @@ export default function Header() {
                 <div>
                   <h3 className="eyebrow mb-2.5 text-ink-400">Now</h3>
                   <p className="text-[15px] leading-relaxed text-ink-200">
-                    14 products in motion
+                    {projects.length} products in motion
                   </p>
                 </div>
               </motion.div>

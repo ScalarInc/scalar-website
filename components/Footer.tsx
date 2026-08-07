@@ -51,7 +51,7 @@ export default function Footer() {
             />
           </motion.div>
           <motion.span
-            className="metal metal-sheen display text-[clamp(40px,11vw,168px)] leading-none tracking-[0.02em]"
+            className="metal metal-sheen font-mark text-[clamp(30px,8.2vw,124px)] uppercase leading-none tracking-[0.04em]"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
