@@ -128,7 +128,6 @@ function Detail({
           <dl className="mt-8 grid gap-x-8 gap-y-5 border-t border-ink-700 pt-7 sm:grid-cols-2">
             {[
               ["Sector", project.sector],
-              ["Lead", project.lead],
               ["Type", project.kind],
               ["Status", project.status],
             ].map(([k, v]) => (
@@ -293,7 +292,7 @@ export default function Work() {
 
                   <div className="flex items-center justify-between gap-4 border-t border-ink-800 pt-4">
                     <span className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-ink-400">
-                      {p.lead} · {p.kind}
+                      {p.sector} · {p.kind}
                     </span>
                     <span className="relative grid h-7 w-7 place-items-center border border-ink-700 text-ink-300 transition-all duration-500 group-hover:rotate-90 group-hover:border-paper group-hover:text-paper">
                       <span className="absolute h-px w-2.5 bg-current" />

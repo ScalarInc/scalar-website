@@ -1,12 +1,117 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import Reveal from "./ui/Reveal";
 import SplitText from "./ui/SplitText";
 
+const TOPICS = [
+  "A new product",
+  "An existing system that's struggling",
+  "Applied AI / machine learning",
+  "Security or compliance",
+  "Joining Scalar",
+];
+
+function CustomSelect({
+  id,
+  name,
+  options,
+  value,
+  onChange,
+}: {
+  id: string;
+  name: string;
+  options: string[];
+  value: string;
+  onChange: (val: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative w-full">
+      <input type="hidden" id={id} name={name} value={value} />
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="flex w-full items-center justify-between border-0 border-b border-ink-950/20 bg-transparent py-3 text-left text-[16px] text-ink-950 outline-none transition-colors hover:border-ink-950 focus:border-ink-950"
+        aria-expanded={open}
+        aria-haspopup="listbox"
+      >
+        <span className="font-medium text-ink-950">{value}</span>
+        <motion.svg
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="h-4 w-4 text-ink-700"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d="M6 9l6 6 6-6" />
+        </motion.svg>
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.ul
+            role="listbox"
+            initial={{ opacity: 0, y: -6, scaleY: 0.96 }}
+            animate={{ opacity: 1, y: 4, scaleY: 1 }}
+            exit={{ opacity: 0, y: -6, scaleY: 0.96 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute left-0 right-0 z-50 overflow-hidden border border-ink-800 bg-ink-950 py-1.5 shadow-2xl"
+          >
+            {options.map((opt, i) => {
+              const isSelected = opt === value;
+              return (
+                <li key={opt}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onChange(opt);
+                      setOpen(false);
+                    }}
+                    className={`flex w-full items-center justify-between px-4 py-3 text-left transition-colors duration-200 ${
+                      isSelected
+                        ? "bg-ink-850 font-medium text-paper"
+                        : "text-ink-300 hover:bg-ink-900 hover:text-paper"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="font-mono text-[11px] text-ink-500">
+                        0{i + 1}
+                      </span>
+                      <span className="text-[14.5px]">{opt}</span>
+                    </div>
+                    {isSelected && (
+                      <span className="h-1.5 w-1.5 rounded-full bg-paper" />
+                    )}
+                  </button>
+                </li>
+              );
+            })}
+          </motion.ul>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function Contact() {
   const [sent, setSent] = useState(false);
+  const [topic, setTopic] = useState(TOPICS[0]);
 
   return (
     <section
@@ -99,17 +204,13 @@ export default function Contact() {
                 >
                   What&rsquo;s this about?
                 </label>
-                <select
+                <CustomSelect
                   id="topic"
                   name="topic"
-                  className="border-0 border-b border-ink-950/15 bg-transparent py-3 text-[16px] text-ink-950 outline-none transition-colors focus:border-ink-950"
-                >
-                  <option>A new product</option>
-                  <option>An existing system that&rsquo;s struggling</option>
-                  <option>Applied AI / machine learning</option>
-                  <option>Security or compliance</option>
-                  <option>Joining Scalar</option>
-                </select>
+                  options={TOPICS}
+                  value={topic}
+                  onChange={setTopic}
+                />
               </div>
 
               <div className="group grid gap-2">

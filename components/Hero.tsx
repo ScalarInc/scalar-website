@@ -235,11 +235,11 @@ export default function Hero() {
       />
 
       <motion.div
-        className="relative z-[1] grid w-full grid-cols-1 items-center gap-2 px-[clamp(20px,9.5vw,150px)] md:grid-cols-2 md:gap-8"
+        className="relative z-[1] grid w-full grid-cols-1 items-center gap-2 px-[clamp(24px,6.5vw,96px)] md:grid-cols-2 md:gap-6"
         style={{ y: lift, opacity: fade }}
       >
         <motion.h1
-          className="display text-[clamp(34px,5.1vw,74px)] text-paper"
+          className="display text-[clamp(24px,3.4vw,50px)] text-paper"
           initial="hidden"
           animate="shown"
           transition={{ staggerChildren: 0.09, delayChildren: 0.25 }}
@@ -258,7 +258,7 @@ export default function Hero() {
         </motion.h1>
 
         <motion.p
-          className="display text-[clamp(34px,5.1vw,74px)] text-paper md:text-right"
+          className="display text-[clamp(24px,3.4vw,50px)] text-paper md:text-right"
           initial="hidden"
           animate="shown"
           transition={{ staggerChildren: 0.09, delayChildren: 0.43 }}

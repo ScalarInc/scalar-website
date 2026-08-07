@@ -30,13 +30,13 @@ function Seal() {
         </defs>
         <text
           fontFamily="var(--font-jetbrains), monospace"
-          fontSize="11.5"
-          letterSpacing="3.4"
+          fontSize="8.8"
+          letterSpacing="1.6"
           fill="currentColor"
           fillOpacity="0.75"
         >
           <textPath href="#sealArc" startOffset="0">
-            BUILT FOR WHAT&rsquo;S NEXT · EST 2026 ·
+            BUILT WITH WHAT&rsquo;S NEXT · EST 2026 · BUILT WITH WHAT&rsquo;S NEXT · EST 2026 ·
           </textPath>
         </text>
       </motion.svg>

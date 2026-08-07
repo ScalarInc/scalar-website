@@ -99,6 +99,7 @@ export default function Capabilities() {
                   animate={{ flexGrow: isActive ? 7 : 1 }}
                   transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
                   style={{ flexBasis: 0, flexShrink: 1 }}
+                  onMouseEnter={() => setActive(i)}
                   onClick={() => setActive(i)}
                   role="button"
                   tabIndex={0}

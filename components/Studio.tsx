@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { projects, tracks, leads } from "@/lib/projects";
+import { projects, tracks } from "@/lib/projects";
 import Reveal from "./ui/Reveal";
 import SplitText from "./ui/SplitText";
 
@@ -36,7 +36,7 @@ const PRINCIPLES = [
 const STATS = [
   { v: String(projects.length), l: "Products in motion" },
   { v: String(tracks.length), l: "Capability tracks" },
-  { v: String(leads.length), l: "Product leads" },
+  { v: "9", l: "Sectors covered" },
   { v: "100%", l: "Built in-house" },
 ];
 
@@ -135,6 +135,7 @@ export default function Studio() {
                   className={`transition-colors duration-500 ${
                     isOpen ? "bg-ink-850" : "bg-ink-950"
                   }`}
+                  onMouseEnter={() => setOpen(i)}
                 >
                   <button
                     onClick={() => setOpen(isOpen ? -1 : i)}
