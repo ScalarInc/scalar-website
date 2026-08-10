@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Abstract field texture">
+  <defs>
+    <linearGradient id="fg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d8c79a"/>
+      <stop offset="0.55" stop-color="#c2ac74"/>
+      <stop offset="1" stop-color="#8f7f52"/>
+    </linearGradient>
+    <filter id="fgrain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="7"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.16"/></feComponentTransfer>
+    </filter>
+    <pattern id="stalks" width="14" height="900" patternUnits="userSpaceOnUse">
+      <path d="M6 900 C 3 640 10 420 5 180" stroke="#efe0b8" stroke-opacity="0.35" stroke-width="1.6" fill="none"/>
+      <path d="M12 900 C 15 660 8 400 13 220" stroke="#7d6c40" stroke-opacity="0.35" stroke-width="1.4" fill="none"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#fg)"/>
+  <rect width="1200" height="900" fill="url(#stalks)"/>
+
+  <g opacity="0.5">
+    <ellipse cx="240" cy="700" rx="420" ry="150" fill="#e6d5a6"/>
+    <ellipse cx="980" cy="790" rx="380" ry="140" fill="#8a7a4c"/>
+  </g>
+
+  <rect width="1200" height="900" filter="url(#fgrain)" opacity="0.55"/>
+</svg>
