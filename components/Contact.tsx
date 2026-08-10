@@ -156,12 +156,12 @@ export default function Contact() {
           ? "Something there didn't look right. Check the email address, and make sure the message is at least a few words."
           : res.status === 429
             ? "That's several enquiries in quick succession. Give it a few minutes and try again."
-            : "We couldn't send that just now. Please try again, or email hello@scalar.dev directly."
+            : "We couldn't send that just now. Please try again, or email scalarinc.dev@gmail.com directly."
       );
       setStatus("error");
     } catch {
       setError(
-        "Couldn't reach the server. Check your connection and try again, or email hello@scalar.dev directly."
+        "Couldn't reach the server. Check your connection and try again, or email scalarinc.dev@gmail.com directly."
       );
       setStatus("error");
     }
@@ -201,7 +201,7 @@ export default function Contact() {
                       href="mailto:scalarinc.dev@gmail.com"
                       className="text-[17px] underline decoration-ink-300 underline-offset-[6px] transition-colors hover:decoration-ink-950"
                     >
-                      hello@scalar.dev
+                      scalarinc.dev@gmail.com
                     </a>
                   </dd>
                 </div>
@@ -237,49 +237,81 @@ export default function Contact() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                  className="border border-ink-950/15 p-[clamp(24px,3vw,44px)]"
+                  // Dark slab rather than an outline box: the section alternates
+                  // dark and light everywhere else, so a solid panel reads as a
+                  // deliberate state change rather than an empty frame.
+                  className="grain relative overflow-hidden bg-ink-950 p-[clamp(28px,3.4vw,52px)] text-paper"
                 >
-                  <motion.span
-                    className="mb-6 grid h-11 w-11 place-items-center rounded-full border border-ink-950"
-                    initial={{ scale: 0.7, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    <svg
-                      className="h-4 w-4"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      aria-hidden="true"
+                  {/* above the grain overlay */}
+                  <div className="relative z-[2]">
+                    <div className="mb-9 flex items-center gap-4">
+                      <motion.span
+                        className="grid h-12 w-12 flex-none place-items-center rounded-full border border-paper/25"
+                        initial={{ scale: 0.7, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                      >
+                        <svg
+                          className="h-4 w-4"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="square"
+                          aria-hidden="true"
+                        >
+                          <motion.path
+                            d="M4 12.5l5.5 5.5L20 7"
+                            initial={{ pathLength: 0 }}
+                            animate={{ pathLength: 1 }}
+                            transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+                          />
+                        </svg>
+                      </motion.span>
+                      <span className="eyebrow text-ink-300">Enquiry received</span>
+                    </div>
+
+                    <h3 className="display mb-4 text-[clamp(26px,3vw,42px)]">
+                      Message
+                      <br />
+                      <span className="italic font-serif font-normal normal-case text-[1.08em] tracking-tight">
+                        received.
+                      </span>
+                    </h3>
+
+                    <p className="max-w-[44ch] text-[15px] leading-[1.72] text-ink-300">
+                      Thanks for getting in touch. Someone will read it properly
+                      and come back to you &mdash; usually within a couple of
+                      working days.
+                    </p>
+
+                    <div className="hairline my-9" />
+
+                    <motion.button
+                      type="button"
+                      onClick={() => {
+                        mountedAt.current = Date.now();
+                        setStatus("idle");
+                      }}
+                      whileHover={{ scale: 1.015 }}
+                      whileTap={{ scale: 0.985 }}
+                      transition={{ duration: 0.25 }}
+                      className="group relative inline-flex items-center justify-center gap-3 overflow-hidden bg-paper px-8 py-5 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-950"
                     >
-                      <motion.path
-                        d="M4 12.5l5.5 5.5L20 7"
-                        initial={{ pathLength: 0 }}
-                        animate={{ pathLength: 1 }}
-                        transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-                      />
-                    </svg>
-                  </motion.span>
-                  <h3 className="display mb-3 text-[clamp(22px,2.4vw,32px)]">
-                    Message received.
-                  </h3>
-                  <p className="max-w-[46ch] text-[15px] leading-[1.7] text-ink-500">
-                    Thanks for getting in touch. Someone will read it properly
-                    and come back to you — usually within a couple of working
-                    days.
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      mountedAt.current = Date.now();
-                      setStatus("idle");
-                    }}
-                    className="mt-8 inline-flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-500 transition-colors hover:text-ink-950"
-                  >
-                    <span className="h-px w-5 bg-current" />
-                    Send another
-                  </button>
+                      <span className="absolute inset-0 origin-left scale-x-0 bg-ink-100 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100" />
+                      <span className="relative">Send another</span>
+                      <svg
+                        className="relative h-3.5 w-3.5 transition-transform duration-500 group-hover:translate-x-1"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                    </motion.button>
+                  </div>
                 </motion.div>
               ) : (
                 <motion.form

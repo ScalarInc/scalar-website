@@ -85,8 +85,9 @@ spreadsheet's first row is a project, not a header. Copy was lightly edited for
 consistent tense and punctuation. The unnamed sign-language project is titled
 "Sign Language Companion" and flagged `status: "Concept"`.
 
-Contact details (`hello@scalar.dev`) are placeholders — swap them in
-`Header.tsx`, `Contact.tsx` and `Footer.tsx`.
+The enquiry address is `scalarinc.dev@gmail.com`, hard-coded in `Header.tsx`,
+`Contact.tsx` and `Footer.tsx`. It also needs to match `MAIL_TO` in `.env`, which
+is where the contact API actually delivers.
 
 ## Contact form
 
