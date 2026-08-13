@@ -7,8 +7,8 @@ const COLS = [
     h: "Enquiries",
     items: [
       {
-        label: "scalarinc.dev@gmail.com",
-        href: "mailto:scalarinc.dev@gmail.com",
+        label: "info@scalar-ai.co",
+        href: "mailto:info@scalar-ai.co",
       },
       {
         label: "LinkedIn",

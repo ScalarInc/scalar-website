@@ -24,7 +24,7 @@ Real environment variables override both.
 |---|---|---|
 | `RESEND_API_KEY` | *required* | |
 | `MAIL_FROM` | `Scalar <onboarding@resend.dev>` | must be a **verified domain** |
-| `MAIL_TO` | `scalarinc.dev@gmail.com` | where enquiries land |
+| `MAIL_TO` | `info@scalar-ai.co` | where enquiries land |
 | `AUTOREPLY_ENABLED` | `false` | see below |
 | `TRUSTED_PROXY` | `true` | read client IP from `X-Forwarded-For` |
 | `RATE_LIMIT_MAX` / `RATE_LIMIT_WINDOW_S` | `5` / `900` | per client IP |
@@ -38,7 +38,7 @@ don't control `gmail.com`'s DNS.
 
 With no verified domain the only usable sender is `onboarding@resend.dev`, and it
 **can only deliver to the address that owns the Resend account**. Anything else
-comes back 403. So today: notifications to `scalarinc.dev@gmail.com` work,
+comes back 403. So today: notifications to `info@scalar-ai.co` work,
 auto-replies to arbitrary enquirers do not.
 
 `AUTOREPLY_ENABLED` therefore defaults to `false`, and `Settings.autoreply_active`

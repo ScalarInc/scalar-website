@@ -156,12 +156,12 @@ export default function Contact() {
           ? "Something there didn't look right. Check the email address, and make sure the message is at least a few words."
           : res.status === 429
             ? "That's several enquiries in quick succession. Give it a few minutes and try again."
-            : "We couldn't send that just now. Please try again, or email scalarinc.dev@gmail.com directly."
+            : "We couldn't send that just now. Please try again, or email info@scalar-ai.co directly."
       );
       setStatus("error");
     } catch {
       setError(
-        "Couldn't reach the server. Check your connection and try again, or email scalarinc.dev@gmail.com directly."
+        "Couldn't reach the server. Check your connection and try again, or email info@scalar-ai.co directly."
       );
       setStatus("error");
     }
@@ -198,10 +198,10 @@ export default function Contact() {
                   <dt className="eyebrow mb-1.5 text-ink-400">Enquiries</dt>
                   <dd>
                     <a
-                      href="mailto:scalarinc.dev@gmail.com"
+                      href="mailto:info@scalar-ai.co"
                       className="text-[17px] underline decoration-ink-300 underline-offset-[6px] transition-colors hover:decoration-ink-950"
                     >
-                      scalarinc.dev@gmail.com
+                      info@scalar-ai.co
                     </a>
                   </dd>
                 </div>

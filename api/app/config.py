@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     # usable sender is onboarding@resend.dev, which can *only* deliver to the
     # address that owns the Resend account.
     mail_from: str = "Scalar <onboarding@resend.dev>"
-    mail_to: str = "scalarinc.dev@gmail.com"
+    mail_to: str = "info@scalar-ai.co"
 
     # Confirmation email to whoever submitted the form. Requires a verified
     # domain: onboarding@resend.dev cannot deliver to arbitrary recipients.
