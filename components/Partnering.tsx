@@ -43,8 +43,11 @@ export default function Partnering() {
     const cx = w / 2;
     const cy = h / 2;
 
-    // clear aperture
-    const apW = Math.min(w * 0.7, 990);
+    /* Clear aperture. The fraction eases from 0.94 on a phone to 0.7 at
+     * desktop: the text column only ever gives back --pad, so a flat 0.7
+     * leaves the copy hanging outside the corner marks on narrow screens. */
+    const t = Math.min(1, Math.max(0, (w - 500) / 700));
+    const apW = Math.min(w * (0.94 - 0.24 * t), 990);
     const apH = Math.min(h * 0.56, 600);
     const apL = cx - apW / 2;
     const apT = cy - apH / 2;
@@ -135,7 +138,7 @@ export default function Partnering() {
           stagger={0.05}
         />
         <Reveal delay={0.25}>
-          <p className="mx-auto mt-7 max-w-[48ch] text-[clamp(14px,1.15vw,17px)] leading-relaxed text-ink-500">
+          <p className="mx-auto mt-7 max-w-[34ch] text-[clamp(14px,1.15vw,17px)] leading-relaxed text-ink-500 sm:max-w-[48ch]">
             We build partnerships, not deliverables. Every product here is one we
             intend to still be responsible for years from now.
           </p>
