@@ -114,14 +114,15 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
+      { url: "/scalar-assets/logo.png", sizes: "1254x1254", type: "image/png" },
       { url: "/favicon.ico", sizes: "any" },
       { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
       { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
+    shortcut: "/scalar-assets/logo.png",
     apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "/scalar-assets/logo.png", sizes: "180x180", type: "image/png" },
     ],
-    shortcut: "/favicon.ico",
   },
   manifest: "/manifest.json",
   category: "technology",
@@ -146,6 +147,9 @@ export default function RootLayout({
       className={`${inter.variable} ${jetbrains.variable} ${michroma.variable} ${serif.variable}`}
     >
       <head>
+        <link rel="icon" href="/scalar-assets/logo.png" type="image/png" sizes="1254x1254" />
+        <link rel="shortcut icon" href="/scalar-assets/logo.png" />
+        <link rel="apple-touch-icon" href="/scalar-assets/logo.png" />
         <StructuredData />
       </head>
       <body>

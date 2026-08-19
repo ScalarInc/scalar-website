@@ -9,6 +9,12 @@
   "orientation": "portrait-primary",
   "icons": [
     {
+      "src": "/scalar-assets/logo.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
       "src": "/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
