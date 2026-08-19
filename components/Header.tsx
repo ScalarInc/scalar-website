@@ -66,11 +66,11 @@ export default function Header() {
           <Link
             href="/"
             className="group flex items-center gap-3"
-            aria-label="Scalar — home"
+            aria-label="Scalar Inc. — Home"
           >
             <Image
               src="/brand/scalar-mark.png"
-              alt=""
+              alt="Scalar Inc. Logo"
               width={40}
               height={40}
               priority
@@ -82,9 +82,11 @@ export default function Header() {
           </Link>
 
           <button
+            type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-controls="nav-overlay"
+            aria-label={open ? "Close navigation menu" : "Open navigation menu"}
             className="relative z-[2] inline-flex items-center gap-3.5 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-paper"
           >
             <span className="hidden sm:block">{open ? "Close" : "Menu"}</span>
@@ -111,7 +113,7 @@ export default function Header() {
             transition={{ duration: 0.75, ease: [0.76, 0, 0.24, 1] }}
           >
             <div className="grid items-end gap-10 lg:grid-cols-[1.4fr_0.6fr] lg:gap-24">
-              <nav aria-label="Primary">
+              <nav aria-label="Primary navigation">
                 <ul>
                   {NAV.map((item, i) => (
                     <li
@@ -152,7 +154,7 @@ export default function Header() {
                 transition={{ duration: 0.5, delay: 0.4 }}
               >
                 <div>
-                  <h3 className="eyebrow mb-2.5 text-ink-400">Enquiries</h3>
+                  <span className="eyebrow mb-2.5 block text-ink-400">Enquiries</span>
                   <a
                     href="mailto:info@scalar-ai.co"
                     className="text-[15px] text-ink-200 transition-colors hover:text-paper"
@@ -161,7 +163,7 @@ export default function Header() {
                   </a>
                 </div>
                 <div>
-                  <h3 className="eyebrow mb-2.5 text-ink-400">Studio</h3>
+                  <span className="eyebrow mb-2.5 block text-ink-400">Studio</span>
                   <p className="text-[15px] leading-relaxed text-ink-200">
                     Remote-first
                     <br />
@@ -169,7 +171,7 @@ export default function Header() {
                   </p>
                 </div>
                 <div>
-                  <h3 className="eyebrow mb-2.5 text-ink-400">Now</h3>
+                  <span className="eyebrow mb-2.5 block text-ink-400">Now</span>
                   <p className="text-[15px] leading-relaxed text-ink-200">
                     {projects.length} products in motion
                   </p>

@@ -88,10 +88,11 @@ export default function Footer() {
 
         <div className="flex flex-wrap items-center justify-between gap-5 border-t border-ink-800 py-6 font-mono text-[10.5px] uppercase tracking-[0.12em] text-ink-500">
           <span>
-            &copy; {new Date().getFullYear()} Scalar — Design demonstration
+            &copy; {new Date().getFullYear()} Scalar Inc. All rights reserved.
           </span>
           <a
             href="#main"
+            aria-label="Back to top of page"
             className="group inline-flex items-center gap-2.5 transition-colors hover:text-paper"
           >
             Back to top

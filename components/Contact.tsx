@@ -44,10 +44,13 @@ function CustomSelect({
       <input type="hidden" id={id} name={name} value={value} />
       <button
         type="button"
+        id={`${id}-button`}
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between border-0 border-b border-ink-950/20 bg-transparent py-3 text-left text-[16px] text-ink-950 outline-none transition-colors hover:border-ink-950 focus:border-ink-950"
         aria-expanded={open}
         aria-haspopup="listbox"
+        aria-controls={`${id}-listbox`}
+        aria-labelledby={`topic-label ${id}-button`}
       >
         <span className="font-medium text-ink-950">{value}</span>
         <motion.svg
@@ -58,6 +61,7 @@ function CustomSelect({
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
+          aria-hidden="true"
         >
           <path d="M6 9l6 6 6-6" />
         </motion.svg>
@@ -66,7 +70,9 @@ function CustomSelect({
       <AnimatePresence>
         {open && (
           <motion.ul
+            id={`${id}-listbox`}
             role="listbox"
+            aria-labelledby="topic-label"
             initial={{ opacity: 0, y: -6, scaleY: 0.96 }}
             animate={{ opacity: 1, y: 4, scaleY: 1 }}
             exit={{ opacity: 0, y: -6, scaleY: 0.96 }}
@@ -76,9 +82,11 @@ function CustomSelect({
             {options.map((opt, i) => {
               const isSelected = opt === value;
               return (
-                <li key={opt}>
+                <li key={opt} role="none">
                   <button
                     type="button"
+                    role="option"
+                    aria-selected={isSelected}
                     onClick={() => {
                       onChange(opt);
                       setOpen(false);
@@ -371,6 +379,7 @@ export default function Contact() {
 
                   <div className="group grid gap-2">
                     <label
+                      id="topic-label"
                       htmlFor="topic"
                       className="eyebrow text-ink-400 transition-colors group-focus-within:text-ink-950"
                     >

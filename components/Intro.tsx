@@ -43,7 +43,7 @@ function Seal() {
 
       <Image
         src="/brand/scalar-mark.png"
-        alt=""
+        alt="Scalar Inc. emblem"
         width={200}
         height={200}
         className="h-[46%] w-auto object-contain"

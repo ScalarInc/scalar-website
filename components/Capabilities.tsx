@@ -104,6 +104,7 @@ export default function Capabilities() {
                   role="button"
                   tabIndex={0}
                   aria-expanded={isActive}
+                  aria-label={`Capability ${i + 1} of ${PANELS.length}: ${panel.title}`}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
