@@ -6,7 +6,10 @@ const COLS = [
   {
     h: "Enquiries",
     items: [
-      { label: "hello@scalar.dev", href: "mailto:hello@scalar.dev" },
+      {
+        label: "info@scalar-ai.co",
+        href: "mailto:info@scalar-ai.co",
+      },
       {
         label: "LinkedIn",
         href: "https://www.linkedin.com/company/scalarinc/",

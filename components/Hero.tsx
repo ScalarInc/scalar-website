@@ -252,11 +252,11 @@ export default function Hero() {
 
       {/* PLANE 2 — type, which the peak will cut across */}
       <motion.div
-        className="relative z-[10] grid w-full grid-cols-1 items-center gap-2 px-[clamp(24px,6.5vw,96px)] md:-mt-[9vh] md:grid-cols-2 md:gap-6"
+        className="relative z-[10] grid w-full grid-cols-2 items-center gap-3 px-[clamp(24px,6.5vw,96px)] md:-mt-[9vh] md:gap-6"
         style={{ y: lift, opacity: fade, x: textX }}
       >
         <motion.h1
-          className="display text-[clamp(24px,3.4vw,50px)] text-paper"
+          className="display text-[clamp(18px,6vw,24px)] text-paper sm:text-[clamp(24px,3.4vw,50px)]"
           initial="hidden"
           animate="shown"
           transition={{ staggerChildren: 0.09, delayChildren: 0.25 }}
@@ -277,7 +277,7 @@ export default function Hero() {
         </motion.h1>
 
         <motion.p
-          className="display text-[clamp(24px,3.4vw,50px)] text-paper md:text-right"
+          className="display text-right text-[clamp(18px,6vw,24px)] text-paper sm:text-[clamp(24px,3.4vw,50px)]"
           initial="hidden"
           animate="shown"
           transition={{ staggerChildren: 0.09, delayChildren: 0.43 }}

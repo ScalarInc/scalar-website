@@ -25,7 +25,7 @@ components/
   Partnering.tsx      halftone aperture statement
   Work.tsx            14-project grid, filters, morphing detail modal
   Studio.tsx          sector marquee, stats, principles accordion
-  Contact.tsx         form (no backend yet)
+  Contact.tsx         form, posts to /api/contact
   Header.tsx          sticky header + full-screen menu overlay
   Footer.tsx          oversized mark + sitemap
   SmoothScroll.tsx    Lenis, disabled under reduced-motion
@@ -33,6 +33,7 @@ components/
 lib/projects.ts       the 14 products, from projects.xlsx
 public/brand/         scalar-mark.png (alpha), scalar-banner.png
 legacy/               the previous static HTML build, kept for reference
+api/                  FastAPI contact service (see api/README.md)
 ```
 
 ## Design system
@@ -84,6 +85,22 @@ spreadsheet's first row is a project, not a header. Copy was lightly edited for
 consistent tense and punctuation. The unnamed sign-language project is titled
 "Sign Language Companion" and flagged `status: "Concept"`.
 
-Contact details (`hello@scalar.dev`) are placeholders — swap them in
-`Header.tsx`, `Contact.tsx` and `Footer.tsx`. The form posts nowhere; wire up the
-submit handler in `Contact.tsx`.
+The enquiry address is `info@scalar-ai.co`, hard-coded in `Header.tsx`,
+`Contact.tsx` and `Footer.tsx`. It also needs to match `MAIL_TO` in `.env`, which
+is where the contact API actually delivers.
+
+## Contact form
+
+The form posts to `/api/contact`, which `next.config.mjs` rewrites to the FastAPI
+service in `api/` — so the request stays same-origin and there is no CORS setup
+anywhere. Both processes need to be running:
+
+```sh
+cd api && uv run uvicorn app.main:app --reload --port 8000
+npm run dev
+```
+
+Delivery goes through Resend. See `api/README.md` for configuration, and note the
+sending-domain constraint there: until a domain is verified in Resend, mail can
+only be delivered to the address that owns the Resend account, which is why the
+auto-reply ships disabled.

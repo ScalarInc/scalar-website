@@ -154,10 +154,10 @@ export default function Header() {
                 <div>
                   <h3 className="eyebrow mb-2.5 text-ink-400">Enquiries</h3>
                   <a
-                    href="mailto:hello@scalar.dev"
+                    href="mailto:info@scalar-ai.co"
                     className="text-[15px] text-ink-200 transition-colors hover:text-paper"
                   >
-                    hello@scalar.dev
+                    info@scalar-ai.co
                   </a>
                 </div>
                 <div>
