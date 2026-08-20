@@ -11,7 +11,7 @@ export default function StructuredData() {
     url: "https://scalar-ai.co",
     logo: {
       "@type": "ImageObject",
-      url: "https://scalar-ai.co/scalar-assets/logo.png",
+      url: "https://scalar-ai.co/apple-touch-icon.png",
       caption: "Scalar Inc. Logo",
     },
     image: "https://scalar-ai.co/og-image.png",
