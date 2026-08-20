@@ -114,14 +114,15 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/scalar-assets/logo.png", sizes: "1254x1254", type: "image/png" },
       { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
       { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
       { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
-    shortcut: "/scalar-assets/logo.png",
+    shortcut: "/favicon.ico",
     apple: [
-      { url: "/scalar-assets/logo.png", sizes: "180x180", type: "image/png" },
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
   },
   manifest: "/manifest.json",
@@ -147,9 +148,12 @@ export default function RootLayout({
       className={`${inter.variable} ${jetbrains.variable} ${michroma.variable} ${serif.variable}`}
     >
       <head>
-        <link rel="icon" href="/scalar-assets/logo.png" type="image/png" sizes="1254x1254" />
-        <link rel="shortcut icon" href="/scalar-assets/logo.png" />
-        <link rel="apple-touch-icon" href="/scalar-assets/logo.png" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <StructuredData />
       </head>
       <body>
