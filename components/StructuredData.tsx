@@ -42,7 +42,10 @@ export default function StructuredData() {
     "@type": "WebSite",
     "@id": "https://scalar-ai.co/#website",
     url: "https://scalar-ai.co",
+    // Drives the site name shown above the URL in Google results. `alternateName`
+    // gives Google shorter fallbacks it may prefer over the full legal name.
     name: "Scalar Inc.",
+    alternateName: ["Scalar", "Scalar AI"],
     description:
       "Scalar is a product studio building AI systems for security, enterprise operations, education, and accessibility.",
     publisher: {
