@@ -261,6 +261,9 @@ export default function Hero() {
           animate="shown"
           transition={{ staggerChildren: 0.09, delayChildren: 0.25 }}
         >
+          <span className="sr-only">
+            Scalar Inc. — Solving Complexity, Delivering Clarity
+          </span>
           {["Solving", "Complexity"].map((t, i) => (
             <span key={t} className="block overflow-hidden pb-4 -mb-4">
               <motion.span
@@ -333,7 +336,7 @@ export default function Hero() {
           <div className="origin-bottom scale-[2.05] sm:scale-[1.45] md:scale-[1.15] lg:scale-100">
             <Image
               src="/brand/mountain.webp"
-              alt=""
+              alt="Scalar mountain peak backdrop representing architectural elevation and scale"
               width={2400}
               height={1085}
               priority
@@ -357,6 +360,7 @@ export default function Hero() {
       {/* minimal scroll cue — the rotating seal lives in the section below */}
       <motion.a
         href="#intro"
+        aria-label="Scroll down to introduction section"
         className="absolute bottom-[clamp(24px,5vw,52px)] right-[var(--pad)] z-[40] inline-flex items-center gap-3 font-mono text-[10.5px] uppercase tracking-[0.18em] text-ink-300 transition-colors hover:text-paper"
         style={{ opacity: fade }}
         initial={{ opacity: 0 }}

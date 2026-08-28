@@ -138,8 +138,11 @@ export default function Studio() {
                   onMouseEnter={() => setOpen(i)}
                 >
                   <button
+                    type="button"
+                    id={`principle-btn-${p.n}`}
                     onClick={() => setOpen(isOpen ? -1 : i)}
                     aria-expanded={isOpen}
+                    aria-controls={`principle-${p.n}`}
                     className="grid w-full grid-cols-[auto_1fr_auto] items-center gap-5 p-[clamp(18px,2vw,30px)] text-left"
                   >
                     <span className="font-mono text-[12px] text-ink-500">
@@ -161,6 +164,9 @@ export default function Studio() {
                   <AnimatePresence initial={false}>
                     {isOpen && (
                       <motion.div
+                        id={`principle-${p.n}`}
+                        role="region"
+                        aria-labelledby={`principle-btn-${p.n}`}
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}

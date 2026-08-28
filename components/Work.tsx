@@ -102,8 +102,9 @@ function Detail({
             {project.index}
           </motion.span>
           <button
+            type="button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label="Close project details"
             className="grid h-10 w-10 flex-none place-items-center border border-ink-600 text-paper transition-colors hover:border-paper"
           >
             <span className="relative grid h-4 w-4 place-items-center rotate-45">
@@ -209,13 +210,15 @@ export default function Work() {
 
         {/* filters */}
         <Reveal delay={0.2}>
-          <div className="mb-9 flex flex-wrap gap-2.5">
+          <div className="mb-9 flex flex-wrap gap-2.5" role="group" aria-label="Filter products by track">
             {(["All", ...tracks] as const).map((t) => {
               const on = filter === t;
               return (
                 <button
                   key={t}
+                  type="button"
                   onClick={() => setFilter(t)}
+                  aria-pressed={on}
                   className={`relative rounded-full border px-4 py-2 font-mono text-[11px] uppercase tracking-[0.12em] transition-colors duration-300 ${
                     on
                       ? "border-paper text-ink-950"
@@ -249,9 +252,12 @@ export default function Work() {
             {list.map((p, i) => (
               <motion.button
                 key={p.slug}
+                type="button"
                 layout
                 layoutId={`card-${p.slug}`}
                 onClick={() => setOpen(p.slug)}
+                aria-haspopup="dialog"
+                aria-label={`View details for ${p.name}`}
                 initial={{ opacity: 0, y: 26 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.96 }}
