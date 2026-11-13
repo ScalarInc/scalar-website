@@ -5,6 +5,7 @@ import Approach from "@/components/Approach";
 import Partnering from "@/components/Partnering";
 import Work from "@/components/Work";
 import Studio from "@/components/Studio";
+import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
       <Partnering />
       <Work />
       <Studio />
+      <FAQ />
       <Contact />
     </>
   );
