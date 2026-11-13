@@ -8,6 +8,5 @@ export default function robots(): MetadataRoute.Robots {
       disallow: ["/api/"],
     },
     sitemap: "https://scalar-ai.co/sitemap.xml",
-    host: "https://scalar-ai.co",
   };
 }

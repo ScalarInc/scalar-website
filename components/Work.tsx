@@ -131,6 +131,7 @@ function Detail({
               ["Sector", project.sector],
               ["Type", project.kind],
               ["Status", project.status],
+              ["Lead", project.lead],
             ].map(([k, v]) => (
               <div key={k}>
                 <dt className="eyebrow mb-1.5 text-ink-400">{k}</dt>
