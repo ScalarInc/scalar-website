@@ -265,7 +265,7 @@ export default function Hero() {
             Scalar Inc. — Solving Complexity, Delivering Clarity
           </span>
           {["Solving", "Complexity"].map((t, i) => (
-            <span key={t} className="block overflow-hidden pb-4 -mb-4">
+            <span key={t} className="block overflow-hidden pb-4 -mb-4" aria-hidden="true">
               <motion.span
                 className={`block ${
                   i === 1 ? "italic font-serif font-normal normal-case text-[1.1em] tracking-tight text-paper/95 leading-normal pb-1" : ""

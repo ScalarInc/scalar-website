@@ -36,7 +36,7 @@ const raw: Omit<Project, "index">[] = [
     track: "Security",
     status: "In build",
     summary:
-      "An autonomous code intelligence engine that performs deep semantic analysis across entire repositories to detect zero-days, memory safety issues, logic flaws, and supply chain risks before code reaches production. Beyond flagging anomalies, it generates validated, pull-request-ready refactors with full test context.",
+      "A code intelligence engine designed to run deep semantic analysis across entire repositories, surfacing memory safety issues, logic flaws, and supply chain risks before code reaches production. Beyond flagging problems, it aims to propose pull-request-ready fixes with test context attached.",
     problem:
       "Modern software teams ship under intense velocity pressure, causing critical security flaws, race conditions, and architectural oversights to bypass conventional static analysis tools. Manual security audits are slow, expensive, and fail to scale with rapid release cycles.",
     audience:
@@ -51,7 +51,7 @@ const raw: Omit<Project, "index">[] = [
     track: "Education",
     status: "In build",
     summary:
-      "A bilingual AI note-taking intelligence platform specifically fine-tuned for code-switched Urdu and English (Urdish) audio streams. It transcribes, organizes, and distills live lectures and corporate meetings into structured hierarchical notes, key decision items, action matrices, and formatted PDF summaries.",
+      "A bilingual AI note-taking platform built for code-switched Urdu and English (Urdish) audio. It transcribes, organizes, and distills live lectures and corporate meetings into structured hierarchical notes, key decision items, action matrices, and formatted PDF summaries.",
     problem:
       "Standard voice-to-text tools fail entirely when handling code-switched bilingual dialogue (Urdu-English dialect blend). Students and professionals lose crucial contextual nuances during fast-paced lectures and boardroom discussions, spending hours attempting to transcribe and structure fragmented manual notes.",
     audience:
@@ -66,7 +66,7 @@ const raw: Omit<Project, "index">[] = [
     track: "Enterprise",
     status: "In build",
     summary:
-      "An end-to-end enterprise bidding intelligence system that ingests multi-hundred-page Request for Proposal (RFP) documents, parses technical and legal compliance matrices, extracts key deliverables, and drafts hyper-accurate proposal responses using historical win data and internal knowledge bases.",
+      "An end-to-end enterprise bidding intelligence system that ingests multi-hundred-page Request for Proposal (RFP) documents, parses technical and legal compliance matrices, extracts key deliverables, and drafts proposal responses grounded in historical win data and internal knowledge bases.",
     problem:
       "Enterprise sales and proposal teams spend weeks manually sifting through complex 200+ page tenders. Unstructured requirements lead to compliance oversights, misaligned pricing models, missed submission deadlines, and lower proposal win rates.",
     audience:
@@ -81,7 +81,7 @@ const raw: Omit<Project, "index">[] = [
     track: "Security",
     status: "In build",
     summary:
-      "A high-throughput threat analysis engine that processes gigabytes of network telemetry and flow logs in real time. Applying unsupervised anomaly detection and graph neural networks, it identifies lateral movement, exfiltration patterns, rogue nodes, and sophisticated APTs with sub-second alert latency.",
+      "A high-throughput threat analysis engine that processes gigabytes of network telemetry and flow logs in real time. Applying unsupervised anomaly detection and graph neural networks, it is designed to flag lateral movement, exfiltration patterns, rogue nodes, and advanced persistent threats in near real time.",
     problem:
       "Traditional Security Information and Event Management (SIEM) systems trigger thousands of false positive alerts daily, overwhelming SOC analysts while sophisticated attackers hide within normal baseline network traffic.",
     audience:
@@ -96,7 +96,7 @@ const raw: Omit<Project, "index">[] = [
     track: "Enterprise",
     status: "In build",
     summary:
-      "An automated compliance governance platform that continuously monitors cloud infrastructure, access controls, and code repositories to automatically gather, cryptographic-stamp, and map evidence against SOC 2, ISO 27001, HIPAA, and GDPR audit frameworks.",
+      "An automated compliance governance platform that continuously monitors cloud infrastructure, access controls, and code repositories to gather timestamped, tamper-evident evidence and map it to SOC 2, ISO 27001, HIPAA, and GDPR audit controls.",
     problem:
       "Manual evidence gathering dominates audit preparation, costing engineering teams hundreds of hours capturing screenshots, pulling configuration snapshots, and assembling spreadsheets right before certification cycles.",
     audience:
@@ -111,7 +111,7 @@ const raw: Omit<Project, "index">[] = [
     track: "Accessibility",
     status: "Concept",
     summary:
-      "A real-time visual translation system powered by edge computer vision and spatial hand tracking. It translates sign language gestures into natural synthesized speech while instantaneously transcribing spoken responses into text and visual sign annotations, enabling fluid bidirectional communication.",
+      "A real-time visual translation system powered by edge computer vision and spatial hand tracking. It translates sign language gestures into synthesized speech while transcribing spoken responses into text and visual sign annotations, enabling fluid bidirectional communication.",
     problem:
       "Over 70 million deaf individuals worldwide face immense communication barriers in daily public interactions, healthcare appointments, and professional environments due to a severe shortage of certified sign language interpreters.",
     audience:
